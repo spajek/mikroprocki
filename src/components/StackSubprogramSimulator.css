@@ -341,3 +341,27 @@
 .ram-cell.vector-cell .cell-marker {
   color: #22d3ee;
 }
+
+@media (max-width: 600px) {
+  .sim-controls-card, .sim-right-panel {
+    padding: 16px;
+  }
+  .active-registers-display {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px;
+  }
+  .registers-input-grid {
+    gap: 10px;
+  }
+  .quick-action-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .quick-action-row button {
+    width: 100%;
+  }
+  .ram-memory-list {
+    max-height: 320px;
+  }
+}

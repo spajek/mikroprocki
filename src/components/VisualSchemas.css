@@ -400,3 +400,33 @@
   0%, 100% { box-shadow: 0 0 10px rgba(99, 102, 241, 0.2); }
   50% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.45); }
 }
+
+@media (max-width: 600px) {
+  .schema-selector {
+    flex-direction: column;
+  }
+  .schema-tab-btn {
+    width: 100%;
+    padding: 8px 12px;
+  }
+  .sidebar-modes, .canvas-panel-visual, .flowchart-stepper, .flowchart-canvas {
+    padding: 16px;
+  }
+  .interactive-diagram-area {
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px;
+  }
+  .svg-canvas {
+    min-width: 520px;
+    height: 320px;
+  }
+  .step-display-card {
+    padding: 16px;
+    min-height: auto;
+  }
+  .flow-node {
+    padding: 10px 12px;
+  }
+}

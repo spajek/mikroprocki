@@ -366,3 +366,30 @@
     background-color: rgba(99, 102, 241, 0.02);
   }
 }
+
+@media (max-width: 600px) {
+  .code-view-panel, .registers-card, .mem-card, .terminal-card {
+    padding: 16px;
+  }
+  .controls-row {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .controls-row button {
+    width: 100%;
+  }
+  .regs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .mem-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .line-code {
+    width: 140px;
+    font-size: 12.5px;
+  }
+  .line-comment {
+    font-size: 11px;
+  }
+}

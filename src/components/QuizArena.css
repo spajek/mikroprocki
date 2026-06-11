@@ -307,3 +307,25 @@
   padding: 12px 30px;
   font-size: 16px;
 }
+
+@media (max-width: 600px) {
+  .quiz-card {
+    padding: 16px;
+  }
+  .question-text {
+    font-size: 16px;
+  }
+  .option-item {
+    padding: 10px 12px;
+  }
+  .option-content {
+    font-size: 13.5px;
+  }
+  .results-panel {
+    padding: 20px;
+    margin: 15px auto;
+  }
+  .results-percentage {
+    font-size: 48px;
+  }
+}
