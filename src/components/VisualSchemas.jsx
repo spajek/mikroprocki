@@ -122,11 +122,11 @@ export default function VisualSchemas() {
                 {/* SVG Visualizer */}
                 <svg className="svg-canvas" viewBox="0 0 600 400" width="100%" height="100%">
                   {/* CPU boundary */}
-                  <rect x="20" y="40" width="220" height="320" rx="15" fill="rgba(30,41,59,0.5)" stroke="var(--border-color)" strokeWidth="2" />
+                  <rect x="20" y="40" width="220" height="320" rx="15" fill="rgba(30,41,59,0.5)" stroke="var(--border)" strokeWidth="2" />
                   <text x="35" y="70" fill="var(--text-secondary)" fontSize="12" fontWeight="700" letterSpacing="1">CPU (PROCESOR)</text>
                   
                   {/* Rejestr A (Accumulator) */}
-                  <rect x="50" y="100" width="160" height="50" rx="8" fill="rgba(99,102,241,0.1)" stroke="var(--color-primary)" strokeWidth="1.5" />
+                  <rect x="50" y="100" width="160" height="50" rx="8" fill="rgba(99,102,241,0.1)" stroke="var(--primary)" strokeWidth="1.5" />
                   <text x="65" y="130" fill="white" fontSize="14" fontWeight="600">Rejestr A (ACC)</text>
                   <rect x="160" y="110" width="40" height="30" rx="4" fill="rgba(0,0,0,0.3)" stroke="rgba(255,255,255,0.1)" />
                   <text x="170" y="130" fill="#fb7185" fontSize="13" className="code-font" id="svg-reg-a">
@@ -136,28 +136,28 @@ export default function VisualSchemas() {
                   {/* Rejestr indeksowy X / R0 */}
                   {selectedMode === 'idx' && (
                     <>
-                      <rect x="50" y="180" width="160" height="50" rx="8" fill="rgba(168,85,247,0.1)" stroke="var(--color-secondary)" strokeWidth="1.5" />
+                      <rect x="50" y="180" width="160" height="50" rx="8" fill="rgba(168,85,247,0.1)" stroke="var(--secondary)" strokeWidth="1.5" />
                       <text x="65" y="210" fill="white" fontSize="14" fontWeight="600">Rejestr X</text>
                       <text x="165" y="210" fill="#c084fc" fontSize="13" className="code-font">$2000</text>
                     </>
                   )}
                   {selectedMode === 'ind' && (
                     <>
-                      <rect x="50" y="180" width="160" height="50" rx="8" fill="rgba(16,185,129,0.1)" stroke="var(--color-success)" strokeWidth="1.5" />
+                      <rect x="50" y="180" width="160" height="50" rx="8" fill="rgba(16,185,129,0.1)" stroke="var(--success)" strokeWidth="1.5" />
                       <text x="65" y="210" fill="white" fontSize="14" fontWeight="600">Rejestr R0</text>
                       <text x="165" y="210" fill="#34d399" fontSize="13" className="code-font">$0030</text>
                     </>
                   )}
                   {selectedMode === 'rel' && (
                     <>
-                      <rect x="50" y="180" width="160" height="50" rx="8" fill="rgba(245,158,11,0.1)" stroke="var(--color-warning)" strokeWidth="1.5" />
+                      <rect x="50" y="180" width="160" height="50" rx="8" fill="rgba(245,158,11,0.1)" stroke="var(--warning)" strokeWidth="1.5" />
                       <text x="65" y="210" fill="white" fontSize="14" fontWeight="600">Rejestr PC</text>
                       <text x="165" y="210" fill="#f59e0b" fontSize="13" className="code-font">$1002</text>
                     </>
                   )}
 
                   {/* ROM / Program Memory */}
-                  <rect x="360" y="40" width="220" height="130" rx="15" fill="rgba(15,23,42,0.6)" stroke="var(--border-color)" strokeWidth="2" />
+                  <rect x="360" y="40" width="220" height="130" rx="15" fill="rgba(15,23,42,0.6)" stroke="var(--border)" strokeWidth="2" />
                   <text x="375" y="65" fill="var(--text-secondary)" fontSize="12" fontWeight="700" letterSpacing="1">ROM (PAMIĘĆ KODU)</text>
                   
                   {/* ROM instruction byte */}
@@ -173,12 +173,12 @@ export default function VisualSchemas() {
                   {/* RAM Memory */}
                   {selectedMode !== 'imm' && (
                     <>
-                      <rect x="360" y="190" width="220" height="170" rx="15" fill="rgba(15,23,42,0.6)" stroke="var(--border-color)" strokeWidth="2" />
+                      <rect x="360" y="190" width="220" height="170" rx="15" fill="rgba(15,23,42,0.6)" stroke="var(--border)" strokeWidth="2" />
                       <text x="375" y="215" fill="var(--text-secondary)" fontSize="12" fontWeight="700" letterSpacing="1">RAM (PAMIĘĆ OPERACYJNA)</text>
                       
                       {selectedMode === 'dir' && (
                         <g>
-                          <rect x="380" y="240" width="180" height="35" rx="4" fill="rgba(168,85,247,0.15)" stroke="var(--color-secondary)" />
+                          <rect x="380" y="240" width="180" height="35" rx="4" fill="rgba(168,85,247,0.15)" stroke="var(--secondary)" />
                           <text x="390" y="262" fill="white" fontSize="11">$0025:</text>
                           <text x="440" y="262" fill="#c084fc" fontSize="12" fontWeight="bold">$99 (Wartość)</text>
                         </g>
@@ -186,7 +186,7 @@ export default function VisualSchemas() {
                       
                       {selectedMode === 'idx' && (
                         <g>
-                          <rect x="380" y="240" width="180" height="35" rx="4" fill="rgba(6,182,212,0.15)" stroke="var(--color-accent)" />
+                          <rect x="380" y="240" width="180" height="35" rx="4" fill="rgba(6,182,212,0.15)" stroke="var(--accent)" />
                           <text x="390" y="262" fill="white" fontSize="11">$2005:</text>
                           <text x="440" y="262" fill="#22d3ee" fontSize="12" fontWeight="bold">$88 (Baza+5)</text>
                         </g>
@@ -194,7 +194,7 @@ export default function VisualSchemas() {
 
                       {selectedMode === 'ind' && (
                         <g>
-                          <rect x="380" y="240" width="180" height="35" rx="4" fill="rgba(16,185,129,0.15)" stroke="var(--color-success)" />
+                          <rect x="380" y="240" width="180" height="35" rx="4" fill="rgba(16,185,129,0.15)" stroke="var(--success)" />
                           <text x="390" y="262" fill="white" fontSize="11">$0030:</text>
                           <text x="440" y="262" fill="#34d399" fontSize="12" fontWeight="bold">$77 (Pośredni)</text>
                         </g>
@@ -202,7 +202,7 @@ export default function VisualSchemas() {
 
                       {selectedMode === 'rel' && (
                         <g>
-                          <rect x="380" y="240" width="180" height="35" rx="4" fill="rgba(245,158,11,0.15)" stroke="var(--color-warning)" />
+                          <rect x="380" y="240" width="180" height="35" rx="4" fill="rgba(245,158,11,0.15)" stroke="var(--warning)" />
                           <text x="390" y="262" fill="white" fontSize="11">$1006:</text>
                           <text x="440" y="262" fill="#f59e0b" fontSize="12" fontWeight="bold">Cel skoku</text>
                         </g>
@@ -218,11 +218,11 @@ export default function VisualSchemas() {
                       <path d="M 400 125 L 400 240 L 130 240 L 130 150" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="4" />
                       {animationPlay && (
                         <>
-                          <path d="M 400 125 L 400 240 L 130 240 L 130 150" fill="none" stroke="var(--color-primary)" strokeWidth="4" className="dash-animation" />
-                          <circle cx="0" cy="0" r="6" fill="var(--color-primary)">
+                          <path d="M 400 125 L 400 240 L 130 240 L 130 150" fill="none" stroke="var(--primary)" strokeWidth="4" className="dash-animation" />
+                          <circle cx="0" cy="0" r="6" fill="var(--primary)">
                             <animateMotion dur="2s" repeatCount="1" path="M 400 125 L 400 240 L 130 240 L 130 150" />
                           </circle>
-                          <text x="210" y="225" fill="var(--color-primary)" fontSize="11" fontWeight="600" className="fade-in-text">Ładowanie stałej $55</text>
+                          <text x="210" y="225" fill="var(--primary)" fontSize="11" fontWeight="600" className="fade-in-text">Ładowanie stałej $55</text>
                         </>
                       )}
                     </g>
@@ -239,18 +239,18 @@ export default function VisualSchemas() {
                       {animationPlay && (
                         <>
                           {/* Address phase */}
-                          <path d="M 470 125 L 470 240" fill="none" stroke="var(--color-secondary)" strokeWidth="4" className="dash-animation" />
-                          <circle cx="0" cy="0" r="6" fill="var(--color-secondary)">
+                          <path d="M 470 125 L 470 240" fill="none" stroke="var(--secondary)" strokeWidth="4" className="dash-animation" />
+                          <circle cx="0" cy="0" r="6" fill="var(--secondary)">
                             <animateMotion dur="1s" repeatCount="1" fill="freeze" path="M 470 125 L 470 240" />
                           </circle>
                           
                           {/* Data phase */}
-                          <path d="M 380 258 L 130 258 L 130 150" fill="none" stroke="var(--color-primary)" strokeWidth="4" className="dash-animation-delayed" />
-                          <circle cx="0" cy="0" r="6" fill="var(--color-primary)">
+                          <path d="M 380 258 L 130 258 L 130 150" fill="none" stroke="var(--primary)" strokeWidth="4" className="dash-animation-delayed" />
+                          <circle cx="0" cy="0" r="6" fill="var(--primary)">
                             <animateMotion begin="1s" dur="1.2s" repeatCount="1" path="M 380 258 L 130 258 L 130 150" />
                           </circle>
-                          <text x="200" y="280" fill="var(--color-secondary)" fontSize="11" fontWeight="600">Krok 1: Wskaż adres $25</text>
-                          <text x="200" y="295" fill="var(--color-primary)" fontSize="11" fontWeight="600">Krok 2: Pobierz wartość $99</text>
+                          <text x="200" y="280" fill="var(--secondary)" fontSize="11" fontWeight="600">Krok 1: Wskaż adres $25</text>
+                          <text x="200" y="295" fill="var(--primary)" fontSize="11" fontWeight="600">Krok 2: Pobierz wartość $99</text>
                         </>
                       )}
                     </g>
@@ -271,22 +271,22 @@ export default function VisualSchemas() {
                       {animationPlay && (
                         <>
                           {/* Signal from X and ROM */}
-                          <circle cx="0" cy="0" r="5" fill="var(--color-secondary)">
+                          <circle cx="0" cy="0" r="5" fill="var(--secondary)">
                             <animateMotion dur="1s" repeatCount="1" fill="freeze" path="M 130 230 L 130 280 L 300 280" />
                           </circle>
-                          <circle cx="0" cy="0" r="5" fill="var(--color-accent)">
+                          <circle cx="0" cy="0" r="5" fill="var(--accent)">
                             <animateMotion dur="1s" repeatCount="1" fill="freeze" path="M 470 125 L 470 160 L 300 160 L 300 280" />
                           </circle>
                           
                           {/* Adder to RAM */}
-                          <path d="M 300 280 L 380 260" fill="none" stroke="var(--color-accent)" strokeWidth="4" className="dash-animation-delayed" />
-                          <circle cx="0" cy="0" r="6" fill="var(--color-accent)">
+                          <path d="M 300 280 L 380 260" fill="none" stroke="var(--accent)" strokeWidth="4" className="dash-animation-delayed" />
+                          <circle cx="0" cy="0" r="6" fill="var(--accent)">
                             <animateMotion begin="1s" dur="0.8s" repeatCount="1" fill="freeze" path="M 300 280 L 380 260" />
                           </circle>
 
                           {/* Data from RAM to ACC */}
-                          <path d="M 380 260 L 280 260 L 280 125 L 210 125" fill="none" stroke="var(--color-primary)" strokeWidth="4" className="dash-animation-delayed-long" />
-                          <circle cx="0" cy="0" r="6" fill="var(--color-primary)">
+                          <path d="M 380 260 L 280 260 L 280 125 L 210 125" fill="none" stroke="var(--primary)" strokeWidth="4" className="dash-animation-delayed-long" />
+                          <circle cx="0" cy="0" r="6" fill="var(--primary)">
                             <animateMotion begin="1.8s" dur="1.2s" repeatCount="1" path="M 380 260 L 280 260 L 280 125 L 210 125" />
                           </circle>
 
@@ -307,18 +307,18 @@ export default function VisualSchemas() {
 
                       {animationPlay && (
                         <>
-                          <path d="M 210 205 L 380 258" fill="none" stroke="var(--color-success)" strokeWidth="3" className="dash-animation" />
-                          <circle cx="0" cy="0" r="5" fill="var(--color-success)">
+                          <path d="M 210 205 L 380 258" fill="none" stroke="var(--success)" strokeWidth="3" className="dash-animation" />
+                          <circle cx="0" cy="0" r="5" fill="var(--success)">
                             <animateMotion dur="1s" repeatCount="1" fill="freeze" path="M 210 205 L 380 258" />
                           </circle>
 
-                          <path d="M 380 258 L 280 258 L 280 125 L 210 125" fill="none" stroke="var(--color-primary)" strokeWidth="4" className="dash-animation-delayed" />
-                          <circle cx="0" cy="0" r="6" fill="var(--color-primary)">
+                          <path d="M 380 258 L 280 258 L 280 125 L 210 125" fill="none" stroke="var(--primary)" strokeWidth="4" className="dash-animation-delayed" />
+                          <circle cx="0" cy="0" r="6" fill="var(--primary)">
                             <animateMotion begin="1s" dur="1.2s" repeatCount="1" path="M 380 258 L 280 258 L 280 125 L 210 125" />
                           </circle>
                           
-                          <text x="210" y="170" fill="var(--color-success)" fontSize="11" fontWeight="600">1. R0 wskazuje adres $0030</text>
-                          <text x="210" y="235" fill="var(--color-primary)" fontSize="11" fontWeight="600">2. Pobierz zawartość z $0030</text>
+                          <text x="210" y="170" fill="var(--success)" fontSize="11" fontWeight="600">1. R0 wskazuje adres $0030</text>
+                          <text x="210" y="235" fill="var(--primary)" fontSize="11" fontWeight="600">2. Pobierz zawartość z $0030</text>
                         </>
                       )}
                     </g>
@@ -332,13 +332,13 @@ export default function VisualSchemas() {
 
                       {animationPlay && (
                         <>
-                          <path d="M 210 205 L 380 258" fill="none" stroke="var(--color-warning)" strokeWidth="4" className="dash-animation" />
-                          <circle cx="0" cy="0" r="6" fill="var(--color-warning)">
+                          <path d="M 210 205 L 380 258" fill="none" stroke="var(--warning)" strokeWidth="4" className="dash-animation" />
+                          <circle cx="0" cy="0" r="6" fill="var(--warning)">
                             <animateMotion dur="1.5s" repeatCount="1" fill="freeze" path="M 210 205 L 380 258" />
                           </circle>
 
-                          <text x="220" y="170" fill="var(--color-warning)" fontSize="11" fontWeight="600">Obliczanie: PC ($1002) + 2 + 2 = $1006</text>
-                          <text x="220" y="235" fill="var(--color-warning)" fontSize="11" fontWeight="600">Skok do instrukcji $1006</text>
+                          <text x="220" y="170" fill="var(--warning)" fontSize="11" fontWeight="600">Obliczanie: PC ($1002) + 2 + 2 = $1006</text>
+                          <text x="220" y="235" fill="var(--warning)" fontSize="11" fontWeight="600">Skok do instrukcji $1006</text>
                         </>
                       )}
                     </g>
