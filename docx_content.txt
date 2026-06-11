@@ -1,0 +1,200 @@
+﻿Zagadnienia na 100%:
+1. Tryby adresowania dla procesora MC6800, MC68HC05, Intel 8051. Np. omów adresowanie względne w MC6800, podaj przykład (w asemblerze(zaprezentuj tryb, który opisujemy i z danego procesora)).
+10. Jak jest zbudowany stos i do czego służy.
+11. Jak jest zbudowany podprogram i do czego służy.  (jedno z tych trzech pytań będzie)
+12. Co to jest i do czego służy wektor przerwań.
+ 1. Tryby adresowania dla procesora MC6800, MC68HC05, Intel 8051. Np. omów adresowanie względne w MC6800, podaj przykład.
+MC6800:
+Adresowanie akumulatorów - operacja na rejestrze wewnętrznym A lub B. Rozkaz jest jednobajtowy.
+Przykład: CLRA ; wyczyszczenie akumulatora A
+Adresowanie Rejestrowe / Wewnętrzne - operacja na rejestrach specjalnych procesora (PC, SP, X). Rozkaz jest jednobajtowy.
+Przykład: INX ; zwiększenie rejestru indeksowego X o 1
+Adresowanie Natychmiastowe - argumentem jest stała wartość liczbowa, zapisana zaraz za kodem operacji. W asemblerze rozpoznawane po znaku #.
+Przykład: LDAA #$55 ; załaduj do akumulatora A wartość szesnastkową 55
+Adresowanie Bezpośrednie - argumentem jest 8-bitowy adres pamięci (od $00 do $FF). Pozwala na szybki dostęp do tzw. strony zerowej pamięci RAM.
+Przykład: LDAA $25 ; załaduj do A zawartość pamięci o adresie $0025
+Adresowanie Rozszerzone - argumentem jest pełny, 16-bitowy adres absolutny pamięci (od $0000 do $FFFF). Rozkaz jest trzybajtowy.
+Przykład: LDAB $2004 ; załaduj do B zawartość komórki o adresie $2004
+Adresowanie Indeksowe - adres jest sumą wartości z rejestru X oraz podanego przesunięcia (offsetu). W asemblerze oznaczane przez ,X.
+Przykład: LDAA 5,X ; załaduj do A zawartość pamięci spod adresu: rejestr X + 5
+Adresowanie Względne - stosowane wyłącznie przy skokach (np. BRA, BSR). Drugi bajt instrukcji zawiera 8-bitowe przesunięcie ze znakiem (kod U2).
+Wzór: $D = (PC + 2) + R$ (gdzie $D$ to adres docelowy, $PC$ to adres rozkazu, a $R$ to przesunięcie).
+Zasięg skoku: od $-128$ do $+127$ bajtów od adresu następnej instrukcji.
+Przykład: BRA TARGET ; skok bezwarunkowy do etykiety TARGET
+8051:
+Adresowanie  rejestrowe – operandem  instrukcji  jest  jeden z  rejestrów R0..R7  z  aktywnego banku  rejestrów,  akumulator,  rejestr  B  lub wskaźnik danych DPTR.
+Przykład: MOV A,R0 ; przeniesienie zawartości rejestru R0 do akumulatora
+Adresowanie  bezpośrednie – operand  jest  jawnie  podanym  8-bitowym adresem  rejestru SFR, rejestru dolnego obszaru RAM  lub bitu adresowalnego bezpośrednio.
+Przykład: MOV A,032H ; przeniesienie zawartości komórki o adresie 032H do akumulatora
+Adresowanie  natychmiastowe – operand  jest  stałą (8  lub  16  bit.) umieszczoną w kodzie programu (pamięć ROM).
+Przykład: ADD A,#32H ; dodanie do akumulatora liczby 32H
+Adresowanie  pośrednie – określenie adresu za pomocą zawartości R0 lub R1 (z aktywnego banku rejestrów) – odwołanie do przestrzeni 256 bajtów.
+Przykład: MOV A,@R0 ; przeniesienie zawartości komórki o adresie zawartym w rejestrze R0 do akumulatora
+Adresowanie sumą  zawartości  rejestru bazowego  i  indeksowego – służy do kopiowania bajtu z pamięci programu.
+Przykład: MOVC A,@A+DPTR ; przeniesienie zawartości komórki pamięci programu o adresie zawartość A + DPTR  do akumulatora
+Przykład: MOVC A,@A+PC ; przeniesienie zawartości komórki pamięci programu o adresie zawartość A + PC  do akumulatora
+Motorola 86HC05:
+IMM, immediate (natychmiastowe) – argument bezpośrednio w programie.
+Przykład: LDA #$55 ; załadowanie liczby 55H do akumulatora
+INH inherent (rejestrowe) – bez argumentów (dotyczy rejestrów CPU), źródło i przeznaczenie określone przez sam kod rozkazu.
+Przykład: INCA ; zwiększenie akumulatora o 1
+EXT extended (rozszerzone) – 16-bitowy adres argumentu.
+Przykład: LDA $3FF ; załadowanie wartości komórki o adresie 03FFH do akumulatora
+DIR direct page (bezpośrednie) – 8-bitowy adres argumentu.
+Przykład: LDA $FF ; załadowanie wartości komórki o adresie 00FFH do akumulatora
+IX IX1 IX2 indexed (0,1,2-byte offset) (indeksowe, z 0-, 1-, lub 2-bajtowym offset'em) – X jako wskaźnik argumentu.
+Przykład: LDA 0,X ; załadowanie wartości komórki o adresie będącym zawartością X do akumulatora
+Przykład: LDA 2,X ; załadowanie wartości komórki o adresie będącym zawartością X zwiększonym o 2 do akumulatora
+Przykład: LDA $3E0,X ; załadowanie wartości komórki o adresie będącym zawartością X zwiększonym o 03E0H do akumulatora
+REL relative (względne) – adres wynikowy liczony względem PC, 8-bitowy offset ze znakiem, używany tylko w instrukcjach typu branch.
+Przykład: BRA $7F ; skok do instrukcji o adresie PC+2+$7F
+10. Jak jest zbudowany stos i do czego służy.
+Budowa stosu.
+Mikroprocesor M6800 posiada 16-bitowy wskaźnik stosu SP, bajt przechowywany na stosie jest zapisywany w komórce pamięci o adresie zapisanym w SP. Bezpośrednio po zapisie każdego bajtu informacji na stosie, wskaźnik stosu SP zostaje automatycznie dekrementowany. Stos rośnie w dół pamięci, dlatego programista musi zadbać aby zarezerwowana ilość pamięci była wystarczająca. Pobieranie informacji ze stosu musi zostać wykonane w odwrotnej kolejności, a po każdym odczytaniu ze stosu kolejnego bajtu informacji, wskaźnik stosu SP zostaje automatycznie inkrementowany. 
+Stos może być tworzony w dowolnym obszarze pamięci RAM (64kb). Istnieje możliwość tworzenia kilku stosów składających się z ciągłych bloków pamięci. 
+Do zapisu na stosie pojedynczego bajtu danych korzystamy z rozkazu PSH, który zapisuje na stos wartość akumulatora A lub B. Do odczytu ze stosu pojedynczego bajtu danych korzystamy z rozkazu PUL, który zapisuje wartość ze stosu do akumulatora A lub B.
+Przeznaczenie stosu.
+Ze stosu korzystamy zwykle w 3 głównych przypadkach:
+Obsługa przerwań - gdy następuje przerwanie, stan rejestrów procesora zostaje zapisany na stosie, następnie po skończonej obsłudze przerwania, stan rejestrów zostaje pobrany ze stosu.
+Skoki do podprogramów - w przypadku skoków do podprogramów, na stosie odkładany zostaje ślad powrotu, dzięki któremu po wykonaniu podprogramu, można było wrócić do poprzedniego bloku pamięci.
+Tymczasowe przechowywanie danych.
+11. Jak jest zbudowany podprogram i do czego służy.
+Podprogramy pozwalają programiście na modułową budowę programu, przejrzystość i łatwość w późniejszej jego modyfikacji. Mechanizm stosu umożliwia wywołanie i powrót z podprogramów. Wykorzystanie stosu umożliwia również wywołanie podprogramu podczas wykonywania innego podprogramu (zagnieżdżenie podprogramów).
+Rozkazy BSR i JSR są rozkazami skoku do podprogramu, na początku wykonania zapisują na stosie adres powrotu.
+W przypadku rozkazu BSR - wartość rejestru PC jest zapisywana jako adres rozkazu BSR zwiększony o dwa
+W przypadku rozkazu JSR - wartość rejestru PC jest zapisywana jako adres rozkazu BSR zwiększony o dwa lub trzy w zależności od trybu adresowania (rozszerzone lub indeksowe)
+Powrót z podprogramu wykonuje się za pomocą rozkazu RTS - adres powrotu jest odczytywany ze stosu i zapisywany do rejestru PC
+12. Co to jest i do czego służy wektor przerwań.
+Flaga/bit istnienia przerwania wchodzi w stan wskazujący, że przerwanie ma nastąpić.
+Wykonywanie rozkazów jest zatrzymane. 
+Rejestry procesora wrzucane są na stos.
+Procesor, wiedząc skąd przyszło przerwanie, idzie do adresu podanego w komórce pamięci będącej wektorem przerwania dla tego konkretnego przerwania.
+Wykonywany jest podprogram obsługujący przerwanie.
+Stan procesora zostaje zdjęty ze stosu.
+Normalne działanie zostaje wznowione.
+Wektory przerwań to komórki pamięci (dla obu procesorów znajdują się w RAM'ie), zawierające adresy podprogramów obsługujących odpowiednie im przerwania. Potrzebne są po to, żeby móc obsłużyć nieobliczalnie pojawiające się sygnały – tzn. takie, których dokładnego czasu zaistnienia nie da się określić.
+Zbuduj pętle w programie, w której będzie zwiększany rejestr X od wartości 1 do wartości
+1000.
+LDX#$0001
+INX
+CPX#$1000
+BNE$FA
+Pomnóż wartość w akumulatorze B przez liczbę 3 i zapisz wynik do akumulatora A, pomiń
+przeniesienie.
+LDX#$0000
+ABA
+INX
+CPX#$0003
+BNE$F9
+Porównaj dwie liczby w akumulatorach A i B, większą zapisz do komórki pamięci o adresie $1212.
+CBA
+BGE$08
+STAB$1212
+BRA$0B
+STAA$1212
+Napisz podprogram zamieniający miejscami liczby zapisane w akumulatorach A i B.
+LDS#$FFF7
+BSR$08
+…
+//$08
+STAA$1000
+TBA
+LDAB$1000
+RTS
+Dodatkowe kody:
+a) W akumulatorze A jest liczba 8 bitowa, pomnóż ją przez 3 i zapisz do B. 
+TAB // B=A
+ASLA // A=A*2
+ABA // A=A+B => A=A*2+A => A=3*A
+TAB  // B=A
+b) A 8 bitowa, B 8 bitowa, większą zapisz do komórki pamięci o adresie 2020 w 16. 
+CBA // A-B, ustawienie flag
+BMI wiekszeB // if N=1 then B>A, skok do etykiety wiekszeB
+STAA $2020// else A>B, zapis akumulatora A do komórki 2020
+BRA koniec     // skok do etykiety koniec
+wiekszeB:// etykieta wiekszeB
+STAB $2020// zapis akumulatora B do komórki 2020
+koniec// etykieta koniec
+c) W przestrzeni pamięci o adresie 2020 znajdują się 3 elementy – 3 liczby 8 bitowe. Posortuj je od najmniejszej do największej. 
+// sortowanie bąbelkowe
+LDAA $2020 // przypisanie wartości komórki 2020 do akumulatora A
+LDAB $2021 // przypisanie wartości komórki 2021 do akumulatora B
+CBA // A-B, porównanie komórki 2020 z 2021
+BMI wieksze2021// if N=1 then B>A, bez zmian, skok do wieksze2021
+STAA $2021// else zamień zawartość 2020 z 2021
+STAB $2020
+wieksze2021: // etykieta wieksze2021
+LDAA $2021// przypisanie wartości komórki 2021 do akumulatora A
+LDAB $2022// przypisanie wartości komórki 2022 do akumulatora B
+CBA// A-B, porównanie komórki 2021 z 2022
+BMI koniec// if N=1 then B>A, bez zmian, skok do koniec
+STAA $2022// else zamień zawartość 2021 z 2022
+STAB $2021
+LDAA $2020// przypisanie wartości komórki 2020 do akumulatora A
+LDAA $2021// przypisanie wartości komórki 2021 do akumulatora B
+CBA// A-B, porównanie komórki 2020 z 2021
+BMI koniec// if N=1 then B>A, bez zmian, skok do koniec
+STAA $2021// else zamień zawartość 2020 z 2021
+STAB $2020
+Koniec// etykieta koniec
+d) Grey na binarny i binarny na Greya. 
+bin -> gray
+10h - komórka w której znajduje się liczba w kodzie binarnym
+11h - wynik w kodzie Greya
+LDAA $10 // przesłanie wartości z komórki 10 do akumulatora A
+LSRA // przesunięcie w prawo o 1 bit akumulatora A
+EORA $10 // xor na akumulatorze A i komórce 10
+STAA $11 // zapis akumulatora A do komórki 11
+gray -> bin
+11h - komórka w której znajduje się liczba w kodzie Greya
+12h - wynik binarnie
+LDAB $11 // przesłanie wartości z komórki 11 do akumulatora B 
+petla: // etykieta petla
+LSR $0011 // przesunięcie w prawo o 1 bit zawartości komórki 11
+BEQ zapis // if Z=1 skok do etykiety zapis
+EORB $11 // else xor na akumulatorze B i komórce 11
+BRA petla// skok do etykiety petla
+zapis:// etykieta zapis
+STAB $12 // zapis akumulatora B do komórki 12
+e) W pamięci o adresie 2020 są 2 liczby 16 bitowe. W BCD należy je odjąć a wynik zapisać w akumulatorze A i B. 
+LDAA $2021 // przesłanie wartości z komórki 2021 do akumulatora A
+SUBA $2023// A=A-s
+DAA// konwersja BCD
+TAB// B=A
+LDAA $2020 // przesłanie wartości z komórki 2020 do akumulatora A
+SUBA $2022// A=A-s
+DAA// konwersja BCD
+- W akumulatorze A znajduje się liczba 8-bitowa, pomnóż ją przez 4 i dodaj 1. Wynik zapisz w B.
+ADD A,# 0100 1001B;
+MOV B,#4;
+MUL AB;
+INC A;
+MOV B,A;
+- W dwóch komórkach pamięci o adresach 1001 i 1002 znajdują się liczby 8-bitowe. Zapisz do akumulatora A większą z nich (na 5 rozkazach).
+MOV 9h, #1
+MOV 10h, #10
+MOV A,9h;
+MOV B,10h;
+CJNE A, B, W1 
+W1:   
+JC W2                    ;JEŚLI A WIĘKSZE OD B
+JMP $
+W2: MOV A,B             ;JEŚLI A MNIEJSZE OD B
+- Przy sumowaniu liczb BCD, musimy użyć operacje DA A (decimal adjust accumulator) po operacji dodania. 
+MOV R0,#014h
+MOV R1,#028h
+MOV A,R0
+ADD A,R1
+DA A
+;Wynikiem będzie 042H. 
+Nie ma operacji dostosowania po odejmowaniu, a więc trzeba użyć dopełnienia do 10 dla liczby odejmowanej, dodać, a następnie zastosować DA A. Dopełnienie do 10 robi się poprzez dodanie 1 do dopełnienia do 9. Dopełnienie do 9 robi się poprze odjęcie od 99H dowolnej liczby dwucyfrowej BCD.
+MOV R0,#028h
+MOV R1,#014h
+MOV A,#099h
+SUBB A,R1 ; dopełnienie do 9
+INC A ; dopełnienie do 10
+ADD A,R0
+DA A
+;Wynikiem będzie 014H.
+Motorola 68HC05
+Tak jak wyżej, ale używamy DAA (bez spacji).
