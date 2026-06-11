@@ -6,6 +6,7 @@ import StackSubprogramSimulator from './components/StackSubprogramSimulator';
 import AssemblyEmulator from './components/AssemblyEmulator';
 import VisualSchemas from './components/VisualSchemas';
 import StudyDashboard from './components/StudyDashboard';
+import WritingArena from './components/WritingArena';
 import { flashcards } from './data/materialsData';
 import './App.css';
 
@@ -128,6 +129,7 @@ function App() {
     { id: 'home',       icon: '🏠', label: 'Panel Główny' },
     { id: 'dashboard',  icon: '📖', label: 'Ściąga / Cram' },
     { id: 'flashcards', icon: '⚡', label: 'Fiszki' },
+    { id: 'writing',    icon: '✍️', label: 'Test Pisemny / Mowa' },
     { id: 'quiz',       icon: '🏆', label: 'Quiz' },
     { id: 'visuals',    icon: '🎨', label: 'Schematy' },
     { id: 'simulators', icon: '🔬', label: 'Symulator Stosu' },
@@ -264,6 +266,7 @@ function App() {
           {activeTab === 'home' && <StudyDashboard onNavigate={handleTabChange} progressPct={progressPct} masteryCount={masteryCount} totalFlashcards={totalFlashcards} />}
           {activeTab === 'dashboard' && <CramDashboard />}
           {activeTab === 'flashcards' && <FlashcardDeck />}
+          {activeTab === 'writing' && <WritingArena />}
           {activeTab === 'quiz' && <QuizArena />}
           {activeTab === 'visuals' && <VisualSchemas />}
           {activeTab === 'simulators' && <StackSubprogramSimulator />}
@@ -273,5 +276,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;
