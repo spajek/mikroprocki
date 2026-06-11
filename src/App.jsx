@@ -129,7 +129,7 @@ function App() {
   const navItems = [
     { id: 'home',       icon: '🏠', label: 'Panel Główny' },
     { id: 'dashboard',  icon: '📖', label: 'Ściąga / Cram' },
-    { id: 'exam',       icon: '📝', label: 'Symulator Zestawów' },
+    { id: 'exam',       icon: '📝', label: 'Symulator Egzaminu' },
     { id: 'flashcards', icon: '⚡', label: 'Fiszki' },
     { id: 'writing',    icon: '✍️', label: 'Test Pisemny / Mowa' },
     { id: 'quiz',       icon: '🏆', label: 'Quiz' },
