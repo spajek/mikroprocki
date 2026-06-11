@@ -7,6 +7,7 @@ import AssemblyEmulator from './components/AssemblyEmulator';
 import VisualSchemas from './components/VisualSchemas';
 import StudyDashboard from './components/StudyDashboard';
 import WritingArena from './components/WritingArena';
+import ExamSimulator from './components/ExamSimulator';
 import { flashcards } from './data/materialsData';
 import './App.css';
 
@@ -128,6 +129,7 @@ function App() {
   const navItems = [
     { id: 'home',       icon: '🏠', label: 'Panel Główny' },
     { id: 'dashboard',  icon: '📖', label: 'Ściąga / Cram' },
+    { id: 'exam',       icon: '📝', label: 'Symulator Zestawów' },
     { id: 'flashcards', icon: '⚡', label: 'Fiszki' },
     { id: 'writing',    icon: '✍️', label: 'Test Pisemny / Mowa' },
     { id: 'quiz',       icon: '🏆', label: 'Quiz' },
@@ -267,6 +269,7 @@ function App() {
           {activeTab === 'dashboard' && <CramDashboard />}
           {activeTab === 'flashcards' && <FlashcardDeck />}
           {activeTab === 'writing' && <WritingArena />}
+          {activeTab === 'exam' && <ExamSimulator />}
           {activeTab === 'quiz' && <QuizArena />}
           {activeTab === 'visuals' && <VisualSchemas />}
           {activeTab === 'simulators' && <StackSubprogramSimulator />}
@@ -276,6 +279,7 @@ function App() {
     </div>
   );
 }
+
 
 
 export default App;
