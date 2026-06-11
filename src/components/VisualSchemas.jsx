@@ -222,7 +222,10 @@ export default function VisualSchemas() {
                           <circle cx="0" cy="0" r="6" fill="var(--primary)">
                             <animateMotion dur="2s" repeatCount="1" path="M 400 125 L 400 240 L 130 240 L 130 150" />
                           </circle>
-                          <text x="210" y="225" fill="var(--primary)" fontSize="11" fontWeight="600" className="fade-in-text">Ładowanie stałej $55</text>
+                          <g className="fade-in-text">
+                            <rect x="200" y="208" width="160" height="22" rx="4" fill="rgba(0, 0, 0, 0.85)" stroke="var(--primary)" strokeWidth="1" />
+                            <text x="210" y="224" fill="#ffffff" fontSize="11" fontWeight="600">Ładowanie stałej $55</text>
+                          </g>
                         </>
                       )}
                     </g>
@@ -249,8 +252,13 @@ export default function VisualSchemas() {
                           <circle cx="0" cy="0" r="6" fill="var(--primary)">
                             <animateMotion begin="1s" dur="1.2s" repeatCount="1" path="M 380 258 L 130 258 L 130 150" />
                           </circle>
-                          <text x="200" y="280" fill="var(--secondary)" fontSize="11" fontWeight="600">Krok 1: Wskaż adres $25</text>
-                          <text x="200" y="295" fill="var(--primary)" fontSize="11" fontWeight="600">Krok 2: Pobierz wartość $99</text>
+                          <g>
+                            <rect x="190" y="263" width="180" height="22" rx="4" fill="rgba(0, 0, 0, 0.85)" stroke="var(--secondary)" strokeWidth="1" />
+                            <text x="200" y="278" fill="#ffffff" fontSize="11" fontWeight="600">Krok 1: Wskaż adres $25</text>
+                            
+                            <rect x="190" y="293" width="180" height="22" rx="4" fill="rgba(0, 0, 0, 0.85)" stroke="var(--primary)" strokeWidth="1" />
+                            <text x="200" y="308" fill="#ffffff" fontSize="11" fontWeight="600">Krok 2: Pobierz wartość $99</text>
+                          </g>
                         </>
                       )}
                     </g>
@@ -290,8 +298,10 @@ export default function VisualSchemas() {
                             <animateMotion begin="1.8s" dur="1.2s" repeatCount="1" path="M 380 260 L 280 260 L 280 125 L 210 125" />
                           </circle>
 
-                          <rect x="220" y="300" width="160" height="25" rx="4" fill="black" opacity="0.8" />
-                          <text x="230" y="316" fill="white" fontSize="10">Obliczanie: $2000 + 5 = $2005</text>
+                          <g>
+                            <rect x="220" y="300" width="190" height="25" rx="4" fill="rgba(0, 0, 0, 0.85)" stroke="var(--accent)" strokeWidth="1" />
+                            <text x="230" y="317" fill="#ffffff" fontSize="11" fontWeight="600">Obliczanie: $2000 + 5 = $2005</text>
+                          </g>
                         </>
                       )}
                     </g>
@@ -317,8 +327,13 @@ export default function VisualSchemas() {
                             <animateMotion begin="1s" dur="1.2s" repeatCount="1" path="M 380 258 L 280 258 L 280 125 L 210 125" />
                           </circle>
                           
-                          <text x="210" y="170" fill="var(--success)" fontSize="11" fontWeight="600">1. R0 wskazuje adres $0030</text>
-                          <text x="210" y="235" fill="var(--primary)" fontSize="11" fontWeight="600">2. Pobierz zawartość z $0030</text>
+                          <g>
+                            <rect x="200" y="153" width="200" height="22" rx="4" fill="rgba(0, 0, 0, 0.85)" stroke="var(--success)" strokeWidth="1" />
+                            <text x="210" y="168" fill="#ffffff" fontSize="11" fontWeight="600">1. R0 wskazuje adres $0030</text>
+
+                            <rect x="200" y="218" width="200" height="22" rx="4" fill="rgba(0, 0, 0, 0.85)" stroke="var(--primary)" strokeWidth="1" />
+                            <text x="210" y="233" fill="#ffffff" fontSize="11" fontWeight="600">2. Pobierz zawartość z $0030</text>
+                          </g>
                         </>
                       )}
                     </g>
@@ -337,8 +352,13 @@ export default function VisualSchemas() {
                             <animateMotion dur="1.5s" repeatCount="1" fill="freeze" path="M 210 205 L 380 258" />
                           </circle>
 
-                          <text x="220" y="170" fill="var(--warning)" fontSize="11" fontWeight="600">Obliczanie: PC ($1002) + 2 + 2 = $1006</text>
-                          <text x="220" y="235" fill="var(--warning)" fontSize="11" fontWeight="600">Skok do instrukcji $1006</text>
+                          <g>
+                            <rect x="210" y="153" width="240" height="22" rx="4" fill="rgba(0, 0, 0, 0.85)" stroke="var(--warning)" strokeWidth="1" />
+                            <text x="220" y="168" fill="#ffffff" fontSize="11" fontWeight="600">Obliczanie: PC ($1002) + 2 + 2 = $1006</text>
+
+                            <rect x="210" y="218" width="200" height="22" rx="4" fill="rgba(0, 0, 0, 0.85)" stroke="var(--warning)" strokeWidth="1" />
+                            <text x="220" y="233" fill="#ffffff" fontSize="11" fontWeight="600">Skok do instrukcji $1006</text>
+                          </g>
                         </>
                       )}
                     </g>
