@@ -31,8 +31,10 @@ export default function FlashcardDeck() {
   // Initialize deck based on filter
   useEffect(() => {
     let filtered = flashcards;
-    if (filterCategory !== 'all') {
-      filtered = flashcards.filter(c => c.category === filterCategory);
+    if (filterCategory === 'pewniaki') {
+      filtered = flashcards.filter(c => ['fc1', 'fc2', 'fc3', 'fc4', 'fc5', 'fc6', 'fc11', 'fc12', 'fc13'].includes(c.id));
+    } else if (filterCategory === 'others') {
+      filtered = flashcards.filter(c => !['fc1', 'fc2', 'fc3', 'fc4', 'fc5', 'fc6', 'fc11', 'fc12', 'fc13'].includes(c.id));
     }
     setDeck(filtered);
     setCurrentIndex(0);
@@ -113,17 +115,27 @@ export default function FlashcardDeck() {
 
       {/* Filters */}
       <div className="flashcard-filters glass-panel">
-        <span className="filter-label">Kategoria:</span>
+        <span className="filter-label">Filtruj zestaw:</span>
         <div className="category-chips">
-          {categories.map((cat, idx) => (
-            <button
-              key={idx}
-              className={`chip-btn ${filterCategory === cat ? 'active' : ''}`}
-              onClick={() => setFilterCategory(cat)}
-            >
-              {cat === 'all' ? 'Wszystkie' : cat}
-            </button>
-          ))}
+          <button
+            className={`chip-btn ${filterCategory === 'all' ? 'active' : ''}`}
+            onClick={() => setFilterCategory('all')}
+          >
+            Wszystkie ({flashcards.length})
+          </button>
+          <button
+            className={`chip-btn ${filterCategory === 'pewniaki' ? 'active' : ''}`}
+            onClick={() => setFilterCategory('pewniaki')}
+            style={{ color: 'var(--error)' }}
+          >
+            🔥 TYLKO PEWNIAKI ({flashcards.filter(c => ['fc1', 'fc2', 'fc3', 'fc4', 'fc5', 'fc6', 'fc11', 'fc12', 'fc13'].includes(c.id)).length})
+          </button>
+          <button
+            className={`chip-btn ${filterCategory === 'others' ? 'active' : ''}`}
+            onClick={() => setFilterCategory('others')}
+          >
+            📖 Pozostała Teoria ({flashcards.filter(c => !['fc1', 'fc2', 'fc3', 'fc4', 'fc5', 'fc6', 'fc11', 'fc12', 'fc13'].includes(c.id)).length})
+          </button>
         </div>
       </div>
 

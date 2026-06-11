@@ -1,0 +1,169 @@
+================================================================================
+OPRACOWANIE ZAGADNIEŃ - MIKROPROCESORY
+================================================================================
+
+[PEWNIAK] 1. Tryby adresowania dla procesora MC6800.
+
+Domniemane (Rejestrowe / Implied):
+* Skojarzenie: "Samo gęste". Rozkaz jest tak oczywisty, że sam w sobie wie, co ma robić. Nie musisz podawać mu żadnego adresu w pamięci.
+* Na egzamin: Kod instrukcji sam w sobie określa na jakim rejestrze operuje, nie wymaga podawania dodatkowego adresu (np. INX - inkrementuj rejestr X).
+
+Natychmiastowe (Immediate):
+* Skojarzenie: "Tu i teraz". Znak #. Zamiast mówić procesorowi "idź pod adres X i weź stamtąd liczbę", dajesz mu tę liczbę od razu do ręki.
+* Na egzamin: Stała wartość danych (argument) jest wpisana na sztywno w kodzie instrukcji, zaraz po opkodzie. Poprzedza się ją znakiem # (np. LDAA #$12 - załaduj do akumulatora A wartość 12 Hex).
+
+Bezpośrednie (Direct):
+* Skojarzenie: "Szybki skrót". Kod używa tylko połówki adresu (8 bitów), żeby błyskawicznie dostać się do pierwszej strony pamięci.
+* Na egzamin: Instrukcja zawiera 8-bitowy adres, odwołując się do szybkiej tzw. strony zerowej pamięci ($0000-$00FF). Pozwala to zaoszczędzić miejsce i przyspieszyć wykonanie (np. LDAA $12).
+
+Rozszerzone (Extended):
+* Skojarzenie: "Pełny zasięg". Używasz długiego adresu, żeby sięgnąć w absolutnie każdy kąt całej pamięci procesora.
+* Na egzamin: Instrukcja przechowuje pełny, 16-bitowy adres komórki pamięci. Daje to dostęp do całej 64-kilobajtowej przestrzeni adresowej procesora (np. LDAA $1234).
+
+Indeksowe (Indexed):
+* Skojarzenie: "Baza + krok". Rejestr X to Twój punkt startowy, a w instrukcji podajesz tylko, o ile kroków od tego punktu masz się przesunąć.
+* Na egzamin: Adres docelowy wyliczany jest jako suma wartości 16-bitowego rejestru indeksowego X oraz 8-bitowego przesunięcia (offsetu bez znaku) zakodowanego w instrukcji (np. LDAA 5,X).
+
+Względne (Relative):
+* Skojarzenie: "Skok względem siebie". Procesor nie skacze pod konkretny adres, tylko np. "10 kroków do przodu" od miejsca, w którym aktualnie stoi.
+* Na egzamin: Stosowane wyłącznie w instrukcjach skoków warunkowych. Adres docelowy wyliczany jest poprzez dodanie do aktualnej zawartości Licznika Rozkazów (PC) 8-bitowego offsetu ze znakiem. Pozwala to na przeskok od -128 do +127 bajtów (np. BRA $0A).
+
+--------------------------------------------------------------------------------
+
+2. Organizacja wewnętrznej pamięci danych w Intelu 8051, tryby adresowania dostępne w poszczególnych blokach pamięci.
+
+Wewnętrzna pamięć danych (RAM) standardowego układu 8051 ma pojemność 128 bajtów (adresy od 00H do 7FH) i dzieli się na trzy bloki:
+* 00H-1FH: Cztery banki rejestrów roboczych (każdy bank zawiera 8 rejestrów R0-R7). Tryby adresowania: rejestrowe, bezpośrednie, pośrednie.
+* 20H-2FH: Obszar adresowany bitowo (16 bajtów, co daje 128 adresowalnych bitów od 00H do 7FH). Tryby adresowania: bitowe, bezpośrednie, pośrednie.
+* 30H-7FH: Pamięć ogólnego przeznaczenia (tzw. notes), służąca np. pod obszar stosu i definiowane zmienne. Tryby adresowania: bezpośrednie, pośrednie.
+* Powyżej adresu 7FH (od 80H do FFH) znajduje się obszar Rejestrów Specjalnych (SFR), dostępny wyłącznie poprzez adresowanie bezpośrednie.
+
+--------------------------------------------------------------------------------
+
+3. Budowa i przeznaczenie magistral: adresowej, danych i sterującej na przykładzie MC6800, MC68HC05, Intel 8051.
+
+* Magistrala adresowa: Jednokierunkowa ścieżka (od procesora do urządzeń). Wskazuje unikalny adres w pamięci lub układzie I/O. MC6800 i 8051 mają 16-bitową magistralę, pozwalającą zaadresować 64 KB pamięci.
+* Magistrala danych: Dwukierunkowa. Zapewnia transfer kodów instrukcji z pamięci do procesora oraz wymianę danych. W omawianych układach jest 8-bitowa.
+* Magistrala sterująca: Zespół sygnałów zarządzających cyklem przesyłu (np. sygnał odczytu/zapisu R/W, synchronizacja, przerwania).
+* Uwaga dla MC68HC05: Jest układem jednoukładowym. Nie ma standardowo wyprowadzonych fizycznych magistral adresowej i danych na piny zewnętrzne (są one wewnątrz struktury).
+
+--------------------------------------------------------------------------------
+
+4. Minimalna konfiguracja sterownika mikroprocesorowego z MC6800.
+
+Układ minimalny wymaga dodania:
+* Dwufazowego, niepokrywającego się generatora sygnału zegarowego (np. MC6875).
+* Zewnętrznej pamięci programu (ROM) z wektorami przerwań i kodem aplikacji.
+* Zewnętrznej pamięci danych (RAM) na operacje podręczne i układ stosu.
+* Ustawionego układu resetowania (dla sprzętowego zresetowania linii).
+
+--------------------------------------------------------------------------------
+
+5. Budowa i przeznaczenie rejestrów wewnętrznych MC6800, MC68HC05, Intel 8051. Wymienić rejestry i omówić ich funkcję.
+
+MC6800:
+* Akumulatory A i B (8-bit): Główne jednostki operujące z jednostką arytmetyczno-logiczną (ALU).
+* Rejestr indeksowy X (16-bit): Wskaźnik stosowany do adresowania indeksowego.
+* Licznik rozkazów PC (16-bit): Definiuje adres, z którego pobrana zostanie następna instrukcja.
+* Wskaźnik stosu SP (16-bit): Wskazuje aktualnie wolny wierzchołek stosu.
+* Rejestr kodów warunków CCR (8-bit): Zawiera bity statusu (flagi, np. Z, C).
+
+MC68HC05:
+* Uproszczony układ. Posiada: jeden Akumulator A (8-bit), skrócony Rejestr indeksowy X (8-bit), ograniczony Wskaźnik Stosu SP, Licznik PC i mniejszy, 5-bitowy CCR.
+
+Intel 8051:
+* Akumulator A (8-bit): Fundamentalny rejestr ALU.
+* Rejestr B (8-bit): Współpracuje z A przy mnożeniu i dzieleniu.
+* Wskaźnik danych DPTR (16-bit): Pomaga w adresowaniu pamięci zewnętrznej lub programu.
+* Licznik rozkazów PC (16-bit): Adres wykonywanej linii.
+* Wskaźnik stosu SP (8-bit): Definiuje stos w wewnętrznym RAM.
+* Słowo Stanu Programu PSW (8-bit): Flagi sprzętowe i wskaźniki banków roboczych.
+
+--------------------------------------------------------------------------------
+
+6. Sygnały zewnętrzne MC6800, MC68HC05, Intel 8051 i ich przeznaczenie.
+
+* MC6800: Piny magistrali adresowej (A0-A15), danych (D0-D7), R/W (kierunek przesyłu), VMA (ważność adresu), zegar (faza 1 i 2), przerwania (IRQ, NMI) oraz RESET.
+* MC68HC05: Linie portów I/O (PA, PB), styki kwarcu taktującego (OSC1, OSC2), zasilanie, pin przerwania (IRQ), RESET.
+* Intel 8051: Cztery porty wejścia/wyjścia (P0-P3, gdzie P0/P2 służą też jako magistrala), ALE (zatrzask adresu), PSEN (zezwolenie na odczyt ROM), EA (wybór pamięci wew./zew.), XTAL1/XTAL2 (oscylator), RST (reset).
+
+--------------------------------------------------------------------------------
+
+7. Organizacja pamięci danych i programu w MC6800, MC68HC05, Intel 8051. Mapa pamięci.
+
+* MC6800/MC68HC05 (Architektura von Neumanna): Kod programu, zmienne w RAM i układy I/O są widoczne we wspólnej, ciągłej mapie pamięci (64KB). RAM kładzie się na początku (strona zerowa), pośrodku I/O, a pamięć ROM na końcu (najwyższe adresy trzymają wektory przerwań i resetu).
+* Intel 8051 (Architektura Harvard): Przestrzenie kodu i danych są fizycznie rozdzielone. Istnieje adresowana 16-bitowo pamięć programu oraz niezależna pamięć danych (RAM).
+
+--------------------------------------------------------------------------------
+
+8. Budowa układu czasowo licznikowego w MC68HC05, obsługa sprzętowa i programowa trzech zdarzeń.
+
+Opiera się na 16-bitowym liczniku swobodnym, zwiększającym wartość synchronicznie z zegarem systemowym. Zdarzenia:
+1. Przepełnienie licznika (Timer Overflow): Kiedy licznik zmienia wartość z $FFFF na $0000, układ zapala flagę i może zgłosić żądanie przerwania.
+2. Przechwycenie (Input Capture): Zewnętrzne zbocze na pinie zatrzaskuje aktualny stan licznika w rejestrze Input Capture, powiadamiając program flagą (pomiar czasu, częstotliwości).
+3. Porównanie (Output Compare): Program zapisuje wartość w rejestrze Output Compare. Gdy licznik zrówna się z tą wartością, sprzęt zapala flagę i może np. automatycznie zmienić stan wyjścia układu (np. do generacji PWM).
+
+--------------------------------------------------------------------------------
+
+9. Budowa układu czasowo licznikowego w Intel 8051, omówić jeden z czterech trybów.
+
+W standardzie 8051 są dwa 16-bitowe układy: Timer 0 i Timer 1. Każdy składa się z dwóch rejestrów 8-bitowych (TH i TL). Pracą timerów sterują rejestry: TMOD (tryby i funkcje) oraz TCON (flagi przepełnienia i uruchamianie timerów).
+Przykład: Tryb 2 (8-bitowy z automatycznym przeładowaniem). Młodszy rejestr (TL) odlicza impulsy od 0 do FFH. Po przepełnieniu układ sprzętowo zgłasza przerwanie, a do rejestru TL automatycznie kopiowana jest stała początkowa przechowywana w starszym rejestrze (TH), i odliczanie od razu zaczyna się od nowa. Służy to do generowania stabilnych, cyklicznych sygnałów np. dla portu szeregowego.
+
+--------------------------------------------------------------------------------
+
+[PEWNIAK] 10. Jak jest zbudowany stos i do czego służy.
+
+* Skojarzenie: Stos talerzy w restauracji. Nowy talerz kładziesz zawsze na samą górę. Jak potrzebujesz talerza, też ściągasz ten z samej góry.
+* Na egzamin: Stos to specyficzna, dynamiczna sekcja w pamięci RAM zbudowana na architekturze LIFO (Last In, First Out). Każdy zapisany element jest kładziony "na szczycie", a jego pozycję monitoruje wskaźnik SP (Stack Pointer).
+Służy do:
+* Przechowywania adresów powrotu, kiedy układ wykonuje skok do podprogramu.
+* Tymczasowego zapisu pełnego stanu procesora (rejestrów i flag) podczas obsługi przerwania.
+* Roboczego przechowywania danych operacjami PSH (zapis) i PUL (odczyt).
+
+--------------------------------------------------------------------------------
+
+[PEWNIAK] 11. Jak jest zbudowany podprogram i do czego służy.
+
+* Skojarzenie: Oddelegowanie zadania. Zamiast robić coś samemu 100 razy w głównym kodzie, wysyłasz procesor do "specjalisty" (podprogramu). Ten robi swoje i wraca dokładnie w miejsce, z którego go wysłano.
+* Na egzamin: Podprogram to logiczny blok kodu ulokowany poza główną pętlą. Wywoływany jest poleceniem (np. JSR), które wpisuje adres powrotu na stos, a następnie przenosi układ do wskazanej pamięci. Instrukcja kończąca RTS nakazuje procesorowi ściągnąć ten adres ze stosu i wskoczyć z powrotem do głównego kodu. Służy do ograniczania dublowania kodu w pamięci i wprowadzania modularności.
+
+--------------------------------------------------------------------------------
+
+[PEWNIAK] 12. Co to jest i do czego służy wektor przerwań.
+
+* Skojarzenie: Tablica z numerami alarmowymi. Gdy dzieje się coś nagłego (przerwanie), procesor rzuca wszystko, patrzy na tablicę (wektor), widzi pod jaki adres ma skoczyć, żeby ugasić pożar, i tam idzie.
+* Na egzamin: Wektor przerwań to predefiniowany, sztywny adres zapisany na stałe w pamięci ROM mikrokontrolera. Stanowi wskaźnik adresowy: w momencie wyzwolenia sygnału sprzętowego (np. IRQ, Reset), procesor zagląda do wektora, odczytuje lokalizację podprogramu obsługi przerwania (ISR) i od tego punktu wznawia obsługę sygnału.
+
+--------------------------------------------------------------------------------
+
+[PEWNIAK] 13. Fragmenty programu w assemblerze MC6800.
+
+A. Zbuduj pętle w programie, w której będzie zwiększany rejestr X od wartości 1 do wartości 1000.
+        LDX #1      ; Ładuje do X stałą wartość 1
+PETLA   INX         ; Dodaje 1 do rejestru X (Inkrementacja)
+        CPX #1000   ; Odejmuje 1000 od rejestru X i zmienia flagi (nie nadpisując samego X)
+        BNE PETLA   ; Branch Not Equal - wykonuje skok na początek etykiety, dopóki flagi Z=0 (różne)
+
+B. Pomnóż wartość w akumulatorze B przez liczbę 3 i zapisz wynik do akumulatora A, pomiń przeniesienie.
+(Wykorzystujemy arytmetykę A = B * 2 + B)
+        TBA         ; Przerzuca kopię zmiennej z akumulatora B do akumulatora A
+        ASLA        ; Arytmetyczne przesunięcie bitowe w lewo w akumulatorze A (A=A*2)
+        ABA         ; Dodaje źródłową wartość z akumulatora B do aktualnego wyniku A. Ostatecznie: A=3*B
+
+C. Porównaj dwie liczby w akumulatorach A i B, większą zapisz do komórki pamięci o adresie $1212.
+        CBA         ; Porównuje i operuje na flagach CCR. Oblicza wewnętrznie różnicę (A-B)
+        BCC ZAPIS_A ; Sprawdza, czy odjęcie wymusiło pożyczkę bitu. BCC (Branch if Carry Clear). Jeśli A>=B, skocz pod ZAPIS_A
+        STAB $1212  ; Skoro brak skoku - B jest stanowczo większe. Wprowadź je do fizycznej pamięci
+        BRA KONIEC  ; Wymuś na siłę skok na koniec omijając zapis zmiennej A
+ZAPIS_A STAA $1212  ; Wprowadź zmienną A do fizycznej pamięci
+KONIEC  NOP         ; Pusta operacja dla oparcia skoku
+
+D. Napisz podprogram zamieniający miejscami liczby zapisane w akumulatorach A i B.
+(Użycie stosu jako bufora)
+SWAP_AB PSHA        ; Odkłada surową wartość A na wierzch stosu
+        PSHB        ; Odkłada surową wartość B na wierzch stosu
+        PULA        ; Ściąga aktualny wierzchołek stosu (czyli przed chwilą położone B) na akumulator A
+        PULB        ; Ściąga następną wartość pod spodem (czyli przed chwilą położone A) na akumulator B
+        RTS         ; Instrukcja Return From Subroutine - natychmiast wraca z podprogramu
+================================================================================

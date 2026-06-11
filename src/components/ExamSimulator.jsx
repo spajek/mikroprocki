@@ -5,18 +5,15 @@ import './ExamSimulator.css';
 // Keyword database for grading exam tasks
 const EXAM_KEYWORDS = {
   // Theory topics
-  stos: ['sp', 'lifo', 'ram', 'dół', 'dekrement', 'psh', 'pul', 'pop', 'push', 'rejestr'],
-  podprogram: ['bsr', 'jsr', 'rts', 'stos', 'adres', 'powrot', 'modułow', 'zagnieżdż'],
-  wektor: ['adres', 'podprogram', 'obsług', 'irq', 'rti', 'ram', 'przerw', 'isr', 'rejestr'],
+  stos: ['lifo', 'ram', 'sp', 'powrot', 'podprogram', 'przerw', 'psh', 'pul', 'talerz', 'wierzch'],
+  podprogram: ['wydziel', 'jsr', 'bsr', 'powrot', 'stos', 'rts', 'dublow', 'moduł'],
+  wektor: ['rom', 'adres', 'isr', 'obsług', 'rti', 'skok', 'przerw'],
 
   // Code exercises
-  ex1_loop: ['ldx', 'inx', 'cpx', 'bne', '$1000', '$fa', '#$0001'],
-  ex2_mul3: ['ldx', '#$0000', 'aba', 'inx', 'cpx', '#$0003', 'bne', '$f9'],
-  ex3_comp: ['cba', 'bge', '$08', 'stab', '$1212', 'bra', '$0b', 'staa'],
-  ex4_swap: ['lds', '#$fff7', 'bsr', 'staa', '$1000', 'tba', 'ldab', 'rts'],
-  ex5_sort: ['ldaa', 'ldab', 'cba', 'bmi', 'staa', 'stab', '$2020', '$2021', '$2022'],
-  ex6_gray: ['ldaa', '$10', 'lsra', 'eora', 'staa', '$11'],
-  ex7_bcd_sub: ['mov', 'r0', '#028h', 'r1', '#014h', 'subb', 'inc', 'add', 'da a']
+  ex1_loop: ['ldx', 'inx', 'cpx', 'bne', 'petla', '1000'],
+  ex2_mul3: ['tba', 'asla', 'aba', 'przesun', 'mnoż'],
+  ex3_comp: ['cba', 'bcc', 'stab', 'bra', 'staa', '1212'],
+  ex4_swap: ['psha', 'pshb', 'pula', 'pulb', 'rts', 'stos']
 };
 
 export default function ExamSimulator() {
@@ -28,22 +25,24 @@ export default function ExamSimulator() {
 
   // Generate a random exam set
   const generateNewSet = () => {
-    // 1. Random Addressing Mode
-    const processors = ['mc6800', 'intel8051'];
-    const randomProc = processors[Math.floor(Math.random() * processors.length)];
-    const modesList = addressingModes[randomProc];
+    // 1. Random Addressing Mode (Only MC6800 modes are Pewniak 1)
+    const modesList = addressingModes.mc6800;
+    if (!modesList || modesList.length === 0) return;
     const randomMode = modesList[Math.floor(Math.random() * modesList.length)];
 
     // 2. Random Hardware Theory (Stos/Podprogram/Wektor)
-    const randomTheory = theory[Math.floor(Math.random() * theory.length)];
+    const pewniakTheory = theory.filter(t => ['stos', 'podprogram', 'wektor'].includes(t.id));
+    if (pewniakTheory.length === 0) return;
+    const randomTheory = pewniakTheory[Math.floor(Math.random() * pewniakTheory.length)];
 
     // 3. Random Assembly Exercise
+    if (codeExercises.length === 0) return;
     const randomCode = codeExercises[Math.floor(Math.random() * codeExercises.length)];
 
     setCurrentSet({
       q1: {
         type: 'addressing',
-        proc: randomProc === 'mc6800' ? 'MC6800 / M68HC05' : 'Intel 8051',
+        proc: 'MC6800 / M68HC05',
         name: randomMode.name,
         officialDesc: randomMode.desc,
         officialExample: randomMode.example,

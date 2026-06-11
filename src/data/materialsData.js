@@ -1,34 +1,120 @@
+// New materials database mapped exactly to "tylkozagadnienia_samomieso.txt"
+
 export const theory = [
   {
-    id: "podprogram",
-    title: "Podprogram (Subroutine)",
-    desc: "Wydzielony, autonomiczny fragment kodu realizujący określone zadanie, który może być wywoływany wielokrotnie z różnych miejsc programu głównego. Główną zaletą stosowania podprogramów jest optymalizacja i oszczędność pamięci zajmowanej przez program.",
+    id: "pamiec_8051",
+    title: "Organizacja wewnętrznej pamięci danych w Intelu 8051",
+    desc: "Wewnętrzna pamięć danych (RAM) standardowego układu 8051 ma pojemność 128 bajtów (adresy od 00H do 7FH) i dzieli się na trzy bloki:\n* 00H-1FH: Cztery banki rejestrów roboczych (każdy bank zawiera 8 rejestrów R0-R7). Tryby adresowania: rejestrowe, bezpośrednie, pośrednie.\n* 20H-2FH: Obszar adresowany bitowo (16 bajtów, co daje 128 adresowalnych bitów od 00H do 7FH). Tryby adresowania: bitowe, bezpośrednie, pośrednie.\n* 30H-7FH: Pamięć ogólnego przeznaczenia (tzw. notes), służąca np. pod obszar stosu i definiowane zmienne. Tryby adresowania: bezpośrednie, pośrednie.\n* Powyżej adresu 7FH (od 80H do FFH) znajduje się obszar Rejestrów Specjalnych (SFR), dostępny wyłącznie poprzez adresowanie bezpośrednie.",
     details: [
-      { label: "Punkt wejścia", text: "W języku asemblera początek podprogramu jest jednoznacznie określony przez dedykowaną etykietę." },
-      { label: "Adres powrotu", text: "W momencie wywołania podprogramu, na stosie automatycznie zapisywany jest adres komórki pamięci zawierającej kolejną instrukcję programu głównego (PC+2 lub PC+3), do której procesor musi powrócić po zakończeniu podprogramu." },
-      { label: "Rozkazy wywołania", text: "Rozkazy BSR (Branch to Subroutine - skok względny) i JSR (Jump to Subroutine - skok bezwarunkowy)." },
-      { label: "Rozkaz powrotu", text: "Powrót z podprogramu wykonuje się za pomocą rozkazu RTS (Return from Subroutine) – adres powrotu jest odczytywany ze stosu i wpisywany do rejestru PC." }
+      { label: "Banki rejestrów (00H-1FH)", text: "Cztery banki po 8 rejestrów roboczych R0-R7. Adresowane rejestrowo, bezpośrednio i pośrednio." },
+      { label: "Adresowalny bitowo (20H-2FH)", text: "16 bajtów (128 bitów o adresach 00H-7FH). Adresowane bitowo, bezpośrednio i pośrednio." },
+      { label: "Notes ogólny (30H-7FH)", text: "Pamięć na zmienne i stos. Adresowanie bezpośrednie i pośrednie." },
+      { label: "Rejestry SFR (80H-FFH)", text: "Rejestry specjalne (np. ACC, B, SP, TCON, TMOD). Dostępne WYŁĄCZNIE poprzez adresowanie bezpośrednie." }
+    ]
+  },
+  {
+    id: "magistrale",
+    title: "Budowa i przeznaczenie magistral",
+    desc: "Magistrale w systemach mikroprocesorowych na przykładzie MC6800, MC68HC05, Intel 8051:\n* Magistrala adresowa: Jednokierunkowa ścieżka (od procesora do urządzeń). Wskazuje unikalny adres w pamięci lub układzie I/O. MC6800 i 8051 mają 16-bitową magistralę, pozwalającą zaadresować 64 KB pamięci.\n* Magistrala danych: Dwukierunkowa. Zapewnia transfer kodów instrukcji z pamięci do procesora oraz wymianę danych. W omawianych układach jest 8-bitowa.\n* Magistrala sterująca: Zespół sygnałów zarządzających cyklem przesyłu (np. sygnał odczytu/zapisu R/W, synchronizacja, przerwania).\n* Uwaga dla MC68HC05: Jest układem jednoukładowym. Nie ma standardowo wyprowadzonych fizycznych magistral adresowej i danych na piny zewnętrzne (są one wewnątrz struktury).",
+    details: [
+      { label: "Magistrala adresowa", text: "Jednokierunkowa, od CPU do pamięci/IO. MC6800 i 8051 mają 16-bitową (adresowanie do 64 KB)." },
+      { label: "Magistrala danych", text: "Dwukierunkowa, 8-bitowa. Przesyła kody instrukcji oraz dane." },
+      { label: "Magistrala sterująca", text: "Sygnały sterujące pracą systemu (R/W, zegar, przerwania IRQ/NMI/RST)." },
+      { label: "MC68HC05", text: "Mikrokontroler jednoukładowy — magistrale są wewnątrz struktury i nie są wyprowadzone na piny zewnętrzne." }
+    ]
+  },
+  {
+    id: "minimalny_mc6800",
+    title: "Minimalna konfiguracja sterownika z MC6800",
+    desc: "Układ minimalny procesora Motorola MC6800 wymaga dodania zewnętrznych elementów pomocniczych:\n* Dwufazowego, niepokrywającego się generatora sygnału zegarowego (np. MC6875).\n* Zewnętrznej pamięci programu (ROM) z wektorami przerwań i kodem aplikacji.\n* Zewnętrznej pamięci danych (RAM) na operacje podręczne i układ stosu.\n* Ustawionego układu resetowania (dla sprzętowego zresetowania linii).",
+    details: [
+      { label: "Generator zegara", text: "Dwufazowy zegar, niepokrywające się sygnały faza 1 i faza 2 (np. układ scalony MC6875)." },
+      { label: "Pamięć ROM", text: "Przechowuje stały kod programu oraz wektory przerwań i resetu w najwyższych adresach." },
+      { label: "Pamięć RAM", text: "Zewnętrzna pamięć operacyjna na zmienne robocze oraz stos systemowy." },
+      { label: "Układ Resetu", text: "Układ wymuszający stan niski na linii RESET po włączeniu zasilania w celu zainicjowania rejestru PC." }
+    ]
+  },
+  {
+    id: "rejestry_wew",
+    title: "Rejestry wewnętrzne MC6800, MC68HC05, Intel 8051",
+    desc: "Zestawienie rejestrów wewnętrznych w 3 architekturach:\n\nMC6800:\n* Akumulatory A i B (8-bit): Główne jednostki operujące z ALU.\n* Rejestr indeksowy X (16-bit): Wskaźnik do adresowania indeksowego.\n* Licznik rozkazów PC (16-bit): Definiuje adres kolejnej instrukcji.\n* Wskaźnik stosu SP (16-bit): Wskazuje wolny wierzchołek stosu.\n* CCR (8-bit): Flagi stanu (Z, C, N, V itp.).\n\nMC68HC05:\n* Uproszczony układ: jeden Akumulator A (8-bit), skrócony Rejestr indeksowy X (8-bit), ograniczony Wskaźnik Stosu SP, Licznik PC i mniejszy, 5-bitowy rejestr flag CCR.\n\nIntel 8051:\n* Akumulator A (8-bit): Fundamentalny rejestr ALU.\n* Rejestr B (8-bit): Pomocniczy rejestr przy mnożeniu i dzieleniu.\n* DPTR (16-bit): Wskaźnik danych do pamięci zewnętrznej lub programu.\n* PC (16-bit): Licznik rozkazów.\n* SP (8-bit): Wskaźnik stosu w wewnętrznej pamięci RAM.\n* PSW (8-bit): Flagi stanu i bity wyboru banku rejestrów roboczych.",
+    details: [
+      { label: "Rejestry MC6800", text: "Akumulatory A i B (8-bit), Rejestr indeksowy X (16-bit), PC (16-bit), SP (16-bit), CCR (8-bit)." },
+      { label: "Rejestry MC68HC05", text: "Akumulator A (8-bit), rejestr X (8-bit), ograniczony SP, PC, oraz 5-bitowy CCR." },
+      { label: "Rejestry Intel 8051", text: "Akumulator A (8-bit), rejestr B (8-bit), DPTR (16-bit), PC (16-bit), SP (8-bit), PSW (8-bit)." }
+    ]
+  },
+  {
+    id: "sygnaly_zew",
+    title: "Sygnały zewnętrzne procesorów",
+    desc: "Kluczowe piny i sygnały zewnętrzne wyprowadzone na obudowę:\n* MC6800: Magistrala adresowa (A0-A15), danych (D0-D7), linia R/W (kierunek zapisu/odczytu), VMA (ważność adresu), zegary faza 1 i faza 2, sygnały przerwań (IRQ, NMI) oraz RESET.\n* MC68HC05: Linie portów wejścia-wyjścia (PA, PB), piny oscylatora kwarcowego (OSC1, OSC2), zasilanie, pin przerwania zewnętrznego (IRQ) oraz RESET.\n* Intel 8051: Cztery porty 8-bitowe (P0-P3, gdzie P0/P2 służą jako magistrala adresu/danych, a P3 zawiera linie alternatywne jak RxD, TxD, INT0, INT1), ALE (zatrzask adresu), PSEN (zezwolenie na odczyt pamięci ROM zewnętrznej), EA (wybór pamięci wew/zew), XTAL1/XTAL2 (zegar), RST (reset).",
+    details: [
+      { label: "Magistrale sygnałów MC6800", text: "A0-A15, D0-D7, R/W (Read/Write), VMA (Valid Memory Address), zegar faza 1/2, IRQ, NMI, RESET." },
+      { label: "Piny jednoukładowego MC68HC05", text: "Brak zew. magistral; linie I/O portów PA/PB, OSC1/OSC2 do kwarcu, IRQ i RESET." },
+      { label: "Linie sterujące Intel 8051", text: "Porty P0-P3, ALE (Address Latch Enable), PSEN (Program Store Enable), EA (External Access), XTAL1/XTAL2, RST." }
+    ]
+  },
+  {
+    id: "organizacja_pamieci",
+    title: "Organizacja pamięci (von Neumann vs Harvard)",
+    desc: "Porównanie architektury pamięci w układach:\n* MC6800 / MC68HC05 (Architektura von Neumanna): Kod programu, zmienne w RAM i układy wejścia-wyjścia (I/O) są widoczne we wspólnej, ciągłej mapie pamięci o rozmiarze 64 KB. Pamięć RAM kładzie się na początku (strona zerowa), pośrodku znajdują się układy I/O, a pamięć ROM zlokalizowana jest na końcu przestrzeni adresowej, gdzie najwyższe adresy trzymają wektory przerwań i resetu.\n* Intel 8051 (Architektura Harvard): Przestrzenie kodu i danych są fizycznie rozdzielone. Istnieje adresowana 16-bitowo pamięć programu (ROM) oraz niezależna pamięć danych (RAM). Dostęp do nich jest realizowany osobnymi sygnałami (np. PSEN dla ROM, RD/WR dla zewnętrznego RAM).",
+    details: [
+      { label: "Von Neumann (MC6800)", text: "Wspólna mapa pamięci dla kodu, zmiennych (RAM) i I/O o rozmiarze 64 KB. RAM na początku (strona zerowa), ROM i wektory na końcu." },
+      { label: "Harvard (Intel 8051)", text: "Fizycznie rozdzielone przestrzenie pamięci kodu (programu) i pamięci danych (RAM). Osobne szyny i sygnały sterujące." }
+    ]
+  },
+  {
+    id: "timer_mc68hc05",
+    title: "Budowa układu czasowo-licznikowego w MC68HC05",
+    desc: "Układ czasowy opiera się na 16-bitowym liczniku swobodnym (free-running counter), który zwiększa swoją wartość synchronicznie z zegarem systemowym. Układ obsługuje sprzętowo i programowo trzy zdarzenia:\n1. Przepełnienie licznika (Timer Overflow): Kiedy licznik zmienia wartość z $FFFF na $0000, układ automatycznie zapala flagę statusu i może zgłosić żądanie przerwania.\n2. Przechwycenie (Input Capture): Zewnętrzny sygnał (zbocze) na dedykowanym pinie zatrzaskuje aktualny stan licznika w rejestrze Input Capture, powiadamiając program flagą (służy do pomiaru czasu trwania impulsu lub częstotliwości).\n3. Porównanie (Output Compare): Program zapisuje zadaną wartość w rejestrze Output Compare. Gdy licznik zrówna się z tą wartością, sprzęt zapala flagę i może wywołać automatyczną zmianę stanu fizycznego pinu wyjściowego (generacja PWM, precyzyjne odmierzanie czasu).",
+    details: [
+      { label: "Licznik swobodny", text: "16-bitowy rejestr zliczający impulsy zegara systemowego od $0000 do $FFFF." },
+      { label: "Przepełnienie (TOF)", text: "Przejście licznika $FFFF -> $0000 ustawia flagę TOF i opcjonalnie wywołuje przerwanie." },
+      { label: "Przechwycenie (ICF)", text: "Zbocze na pinie wejściowym przepisuje wartość licznika do rejestru Input Capture (pomiar sygnałów)." },
+      { label: "Porównanie (OCF)", text: "Zrównanie licznika z rejestrem Output Compare ustawia flagę OCF i może zmienić stan pinu wyjściowego." }
+    ]
+  },
+  {
+    id: "timer_8051",
+    title: "Budowa układu czasowo-licznikowego w Intel 8051",
+    desc: "W standardzie mikrokontrolera 8051 znajdują się dwa 16-bitowe układy timerów/liczników: Timer 0 i Timer 1. Każdy z nich składa się z dwóch niezależnych rejestrów 8-bitowych (starszego TH i młodszego TL). Pracą timerów sterują rejestry specjalne SFR:\n- TMOD: Rejestr konfiguracyjny (ustawia tryby pracy i funkcję timer/licznik).\n- TCON: Rejestr sterujący (flagi przepełnienia TFx oraz bity uruchamiające TRx).\n\nOmówienie Trybu 2 (8-bitowy z automatycznym przeładowaniem):\nMłodszy rejestr (TL) odlicza impulsy od 0 do FFH. Po przepełnieniu (przejście z FFH na 00H) układ sprzętowo zgłasza flagę przerwania (TF), a do rejestru TL automatycznie kopiowana jest stała początkowa przechowywana w starszym rejestrze (TH). Odliczanie natychmiast zaczyna się od nowa. Tryb ten służy do generowania stabilnych, cyklicznych częstotliwości, np. prędkości transmisji (baud rate) dla portu szeregowego.",
+    details: [
+      { label: "Struktura sprzętowa", text: "Dwa timery 16-bitowe (Timer 0 i Timer 1). Każdy składa się z rejestru TH (High) i TL (Low)." },
+      { label: "Rejestr TMOD", text: "Ustawia tryb pracy (0-3) oraz decyduje, czy zliczamy zegar wewnętrzny (Timer) czy impulsy z pinu zewnętrznego (Counter)." },
+      { label: "Rejestr TCON", text: "Zawiera bity uruchamiające TR0/TR1 oraz flagi przepełnienia TF0/TF1." },
+      { label: "Tryb 2 (Autoreload)", text: "8-bitowy licznik TL. Po przepełnieniu sprzętowo ładuje wartość z rejestru TH do TL i zlicza od nowa. Używany np. do generowania prędkości portu szeregowego." }
     ]
   },
   {
     id: "stos",
-    title: "Stos (Stack)",
-    desc: "Wydzielony obszar pamięci operacyjnej RAM przeznaczony do tymczasowego przechowywania danych, funkcjonujący w oparciu o architekturę kolejki LIFO (Last In, First Out) – dane zapisane jako ostatnie są odczytywane jako pierwsze.",
+    title: "Jak jest zbudowany stos i do czego służy [PEWNIAK]",
+    desc: "Stos to specyficzna, dynamiczna sekcja w pamięci RAM mikrokontrolera, działająca w oparciu o architekturę kolejki LIFO (Last In, First Out) – dane zapisane jako ostatnie są odczytywane jako pierwsze (analogia do stosu talerzy w restauracji, gdzie nowy kładziesz na górę i ściągasz z góry). Pozycję wierzchołka stosu w pamięci stale monitoruje specjalny rejestr procesora — wskaźnik stosu SP (Stack Pointer).\n\nStos służy do:\n1. Przechowywania adresów powrotu, kiedy procesor wykonuje skok do podprogramu (np. bsr, jsr).\n2. Tymczasowego zapisu pełnego stanu procesora (rejestrów roboczych i flag CCR/PSW) podczas sprzętowej obsługi przerwań, co umożliwia bezproblemowy powrót do głównego programu.\n3. Roboczego przechowywania danych przez programistę za pomocą instrukcji zapisu (PSH / PUSH) i odczytu (PUL / POP).",
     details: [
-      { label: "Wskaźnik stosu (SP)", text: "Rejestr procesora (16-bitowy w M6800, 8-bitowy w 8051) wskazujący na aktualny wierzchołek (szczyt) stosu." },
-      { label: "Operacje podstawowe", text: "Zapis realizowany jest instrukcją PUSH / PSH (zapisuje akumulator A lub B na stos), a odczyt instrukcją POP / PUL (pobiera dane ze stosu do rejestru)." },
-      { label: "Kierunek wzrostu", text: "W procesorach M6800 stos rośnie w dół pamięci. Po zapisie każdego bajtu, wskaźnik SP jest automatycznie dekrementowany. Przy odczycie SP jest inkrementowany po pobraniu bajtu." },
-      { label: "Zastosowanie", text: "Przechowywanie adresów powrotu z podprogramów, automatyczna obsługa rejestrów CPU podczas przerwań oraz tymczasowe zapamiętywanie stanów rejestrów przez programistę." }
+      { label: "Struktura LIFO", text: "Last In, First Out (Ostatni wszedł, pierwszy wyszedł). Dane są dokładane i zdejmowane wyłącznie ze szczytu stosu." },
+      { label: "Wskaźnik SP", text: "Rejestr przechowujący adres aktualnego wierzchołka stosu w pamięci RAM." },
+      { label: "Adresy powrotu", text: "W momencie skoku do podprogramu, adres następnej instrukcji jest automatycznie odkładany na stos." },
+      { label: "Obsługa przerwań", text: "Podczas przerwania sprzęt automatycznie ratuje rejestry procesora i flagi na stosie przed skokiem do procedury obsługi (ISR)." }
+    ]
+  },
+  {
+    id: "podprogram",
+    title: "Jak jest zbudowany podprogram i do czego służy [PEWNIAK]",
+    desc: "Podprogram to wydzielony, autonomiczny blok kodu zlokalizowany poza głównym programem (pętlą główną). Wywoływany jest za pomocą dedykowanych instrukcji wywołania (np. BSR - skok względny, JSR - skok bezwarunkowy). W momencie wywołania, procesor automatycznie zapisuje na stosie adres powrotu (adres komórki pamięci bezpośrednio za rozkazem wywołania), a następnie przenosi sterowanie pod adres podprogramu.\n\nPodprogram musi kończyć się specjalnym rozkazem powrotu RTS (Return from Subroutine). Wykonanie RTS powoduje ściągnięcie adresu powrotu ze stosu i wpisanie go z powrotem do licznika rozkazów PC, dzięki czemu procesor wznawia pracę w głównym kodzie dokładnie tam, skąd został wysłany. Służy do unikania powielania kodu w pamięci i wprowadzania czytelnej, modułowej struktury oprogramowania.",
+    details: [
+      { label: "Wywołanie podprogramu", text: "Instrukcje BSR lub JSR. Zapisują aktualny adres powrotu (PC) na stos i skaczą do etykiety podprogramu." },
+      { label: "Działanie na stosie", text: "Stos przechowuje adres powrotu na czas wykonywania podprogramu. Umożliwia to zagnieżdżanie wywołań." },
+      { label: "Rozkaz powrotu RTS", text: "Ostatnia instrukcja podprogramu. Zdejmuje 16-bitowy adres ze stosu i wpisuje go do rejestru PC." },
+      { label: "Przeznaczenie", text: "Modułowość kodu, oszczędność pamięci ROM poprzez wielokrotne wywoływanie tego samego bloku instrukcji." }
     ]
   },
   {
     id: "wektor",
-    title: "Wektor Przerwań (Interrupt Vector)",
-    desc: "Komórka lub obszar w pamięci o stałym adresie fizycznym, w którym zapisany jest adres podprogramu obsługi danego przerwania (ISR - Interrupt Service Routine).",
+    title: "Co to jest i do czego służy wektor przerwań [PEWNIAK]",
+    desc: "Wektor przerwań to predefiniowana komórka o sztywno określonym adresie fizycznym w pamięci ROM mikrokontrolera, która przechowuje adres podprogramu obsługi danego przerwania (ISR - Interrupt Service Routine). Występuje tu analogia do tablicy z numerami alarmowymi: w razie nagłego zdarzenia (np. reset, sygnał sprzętowy IRQ), procesor przerywa aktualne zadanie, zagląda pod przypisany adres wektora przerwania, odczytuje stamtąd wskaźnik adresowy i wykonuje skok do procedury obsługującej to zdarzenie.\n\nPo zakończeniu procedury ISR rozkazem powrotu z przerwania (RTI / RETI), stan rejestrów i licznik PC są pobierane ze stosu, a procesor wraca do wykonywania głównego programu.",
     details: [
-      { label: "Przeznaczenie", text: "Pozwala na obsługę nieprzewidywalnych w czasie sygnałów zewnętrznych lub wewnętrznych." },
-      { label: "Sekwencja sprzętowa", text: "1. Flaga przerwania wchodzi w stan aktywny. 2. Wykonywanie programu jest wstrzymywane po bieżącej instrukcji. 3. Rejestry procesora są automatycznie odkładane na stos. 4. Procesor odczytuje adres ISR z wektora przerwań. 5. Następuje skok do ISR. 6. Instrukcja powrotu z przerwania (RTI / RETI) zdejmuje rejestry ze stosu i wznawia program." },
-      { label: "Lokalizacja", text: "Wektory znajdują się w ustalonym obszarze pamięci RAM/ROM (np. na końcu przestrzeni adresowej)." }
+      { label: "Stały adres w ROM", text: "Wektory znajdują się w ściśle określonym miejscu pamięci ROM (w MC6800 pod koniec obszaru, od $FFF0 do $FFFF)." },
+      { label: "Wskaźnik adresowy", text: "Wektor nie zawiera kodu obsługi, lecz sam adres (wskaźnik) komórki pamięci, pod którą zaczyna się procedura obsługi (ISR)." },
+      { label: "Powrót RTI / RETI", text: "Instrukcja na końcu ISR. Ściąga odłożone rejestry i adres PC ze stosu, wznawiając przerwany program." }
     ]
   }
 ];
@@ -36,320 +122,135 @@ export const theory = [
 export const addressingModes = {
   mc6800: [
     {
-      name: "Adresowanie podwójne (MC6800)",
-      desc: "Specyficzny tryb kombinowany, w którym pierwszym operandem jest domyślnie akumulator (A lub B). Drugi operand jest wyznaczany za pomocą innego, standardowego trybu (natychmiastowego, bezpośredniego, rozszerzonego lub indeksowego).",
-      example: "LDAA $25",
-      comment: "przykład wykorzystania akumulatora A oraz adresu $25"
-    },
-    {
-      name: "Adresowanie akumulatorów (MC6800)",
-      desc: "Instrukcje jednobajtowe, gdzie operand znajduje się bezpośrednio w akumulatorze A lub B. Operacja ta wykonywana jest na rejestrze wewnętrznym A lub B. Dla instrukcji ściągania/wkładania na stos (PUL, PSH) jest to jedyny dostępny tryb.",
-      example: "CLRA",
-      comment: "wyczyszczenie akumulatora A"
-    },
-    {
-      name: "Adresowanie Rejestrowe / Wewnętrzne / Inherent (MC6800)",
-      desc: "Operand znajduje się wewnątrz określonego rejestru procesora, a informacja o nim jest sztywno zaszyta w samej mnemonice instrukcji. Operacja wykonywana jest na rejestrach specjalnych procesora (PC, SP, X). Rozkaz jest jednobajtowy, a procesor nie musi pobierać adresu z pamięci.",
+      name: "Domniemane (Rejestrowe / Implied)",
+      desc: "Kod instrukcji sam w sobie określa na jakim rejestrze operuje, nie wymaga podawania dodatkowego adresu (np. INX - inkrementuj rejestr X). Rozkaz jest jednobajtowy i procesor nie musi pobierać adresu z pamięci.",
       example: "INX",
-      comment: "zwiększenie rejestru indeksowego X o 1"
+      comment: "inkrementuj rejestr indeksowy X o 1 (rejestr wskazany w opkodzie)"
     },
     {
-      name: "Adresowanie Natychmiastowe / Immediate (MC6800)",
-      desc: "Argumentem (dana stała) jest stała wartość liczbowa zapisana bezpośrednio zaraz za kodem operacji w pamięci ROM na kolejnych bajtach kodu operacji (2. lub 3. bajt). W asemblerze tryb ten rozpoznawany i oznaczany jest po znaku #.",
-      example: "LDAA #$55",
-      comment: "załaduj do akumulatora A wartość szesnastkową 55"
+      name: "Natychmiastowe (Immediate)",
+      desc: "Stała wartość danych (argument) jest wpisana na sztywno w kodzie instrukcji, zaraz po opkodzie w pamięci programu (ROM). W asemblerze tryb ten poprzedza się znakiem #.",
+      example: "LDAA #$12",
+      comment: "załaduj do akumulatora A wartość szesnastkową $12 (tu i teraz)"
     },
     {
-      name: "Adresowanie Bezpośrednie / Direct (MC6800)",
-      desc: "Argumentem jest 8-bitowy adres pamięci (od $00 do $FF). Drugi bajt instrukcji zawiera pełny adres komórki pamięci. Pozwala to na szybki dostęp do tzw. strony zerowej pamięci RAM (gdzie starszy bajt adresu wynosi zawsze 00h), co przyspiesza wykonanie programu.",
-      example: "LDAA $25",
-      comment: "załaduj do A zawartość pamięci o adresie $0025"
+      name: "Bezpośrednie (Direct)",
+      desc: "Instrukcja zawiera 8-bitowy adres, odwołując się do szybkiej tzw. strony zerowej pamięci RAM ($0000-$00FF). Pozwala to zaoszczędzić miejsce (rozkaz zajmuje 2 bajty) i przyspieszyć wykonanie.",
+      example: "LDAA $12",
+      comment: "załaduj do A zawartość pamięci spod 8-bitowego adresu $0012"
     },
     {
-      name: "Adresowanie Rozszerzone / Extended (MC6800)",
-      desc: "Argumentem jest pełny, 16-bitowy adres absolutny pamięci (od $0000 do $FFFF). Instrukcja zawiera pełny, 16-bitowy adres fizyczny operandu umieszczony na drugim i trzecim bajcie instrukcji. Rozkaz jest trzybajtowy i pozwala na dostęp do pełnego obszaru pamięci.",
-      example: "LDAB $2004",
-      comment: "załaduj do B zawartość komórki o adresie $2004"
+      name: "Rozszerzone (Extended)",
+      desc: "Instrukcja przechowuje pełny, 16-bitowy adres komórki pamięci. Daje to dostęp do całej 64-kilobajtowej przestrzeni adresowej procesora ($0000-$FFFF), ale rozkaz zajmuje 3 bajty.",
+      example: "LDAA $1234",
+      comment: "załaduj do A zawartość pamięci spod 16-bitowego adresu $1234"
     },
     {
-      name: "Adresowanie Indeksowe / Indexed (MC6800)",
-      desc: "Adres efektywny operandu powstaje poprzez zsumowanie zawartości rejestru indeksowego (np. IX) z przesunięciem (offsetem) podanym w instrukcji. W asemblerze tryb ten oznaczany jest przez ,X lub sam symbol X.",
+      name: "Indeksowe (Indexed)",
+      desc: "Adres docelowy (efektywny) operandu wyliczany jest dynamicznie jako suma wartości 16-bitowego rejestru indeksowego X oraz 8-bitowego przesunięcia (offsetu bez znaku) zakodowanego w instrukcji.",
       example: "LDAA 5,X",
       comment: "załaduj do A zawartość pamięci spod adresu: rejestr X + 5"
     },
     {
-      name: "Adresowanie Względne / Relative (MC6800)",
-      desc: "Stosowane wyłącznie przy skokach (np. BRA, BSR) i skokach lokalnych. Adres docelowy wyznaczany jest jako 8-bitowe przesunięcie ze znakiem (offset w kodzie U2) względem aktualnej wartości licznika rozkazów (PC). Wyliczany jest według wzoru D = (PC + 2) + R, gdzie D to adres docelowy, PC to adres rozkazu, a R to przesunięcie. Zasięg skoku wynosi od -128 do +127 bajtów od adresu następnej instrukcji.",
-      example: "BRA TARGET",
-      comment: "skok bezwarunkowy do etykiety TARGET"
-    },
-    {
-      name: "IMM, immediate - Natychmiastowe (M68HC05)",
-      desc: "Tryb adresowania dla procesora Motorola 68HC05. Argument znajduje się bezpośrednio w kodzie programu.",
-      example: "LDA #$55",
-      comment: "załadowanie liczby 55H do akumulatora"
-    },
-    {
-      name: "INH, inherent - Rejestrowe (M68HC05)",
-      desc: "Tryb bez argumentów (dotyczy rejestrów CPU). Źródło i przeznaczenie określone są przez sam kod rozkazu.",
-      example: "INCA",
-      comment: "zwiększenie akumulatora o 1"
-    },
-    {
-      name: "EXT, extended - Rozszerzone (M68HC05)",
-      desc: "Tryb adresowania dla procesora Motorola 68HC05. Wykorzystuje 16-bitowy adres argumentu.",
-      example: "LDA $3FF",
-      comment: "załadowanie wartości komórki o adresie 03FFH do akumulatora"
-    },
-    {
-      name: "DIR, direct page - Bezpośrednie (M68HC05)",
-      desc: "Tryb adresowania dla procesora Motorola 68HC05. Wykorzystuje 8-bitowy adres argumentu.",
-      example: "LDA $FF",
-      comment: "załadowanie wartości komórki o adresie 00FFH do akumulatora"
-    },
-    {
-      name: "IX, indexed - Indeksowe (M68HC05)",
-      desc: "Rejestr X służy jako wskaźnik argumentu. Może występować jako tryb indeksowy z 0-, 1-, lub 2-bajtowym offsetem (przesunięciem).",
-      example: "LDA 2,X",
-      comment: "załadowanie wartości komórki o adresie będącym zawartością X zwiększonym o 2 do akumulatora"
-    },
-    {
-      name: "REL, relative - Względne (M68HC05)",
-      desc: "Tryb adresowania dla procesora Motorola 68HC05. Adres wynikowy liczony jest względem licznika PC. Wykorzystuje 8-bitowy offset ze znakiem i używany jest tylko w instrukcjach typu branch.",
-      example: "BRA $7F",
-      comment: "skok do instrukcji o adresie PC+2+$7F"
+      name: "Względne (Relative)",
+      desc: "Stosowane wyłącznie w instrukcjach skoków warunkowych. Adres docelowy wyliczany jest poprzez dodanie do aktualnej zawartości Licznika Rozkazów (PC) 8-bitowego offsetu ze znakiem (kod U2). Pozwala to na przeskok w zakresie od -128 do +127 bajtów od adresu następnej instrukcji.",
+      example: "BRA $0A",
+      comment: "skocz bezwarunkowo o $0A bajtów w przód względem PC+2"
     }
   ],
-  intel8051: [
-    {
-      name: "Adresowanie rejestrowe (Intel 8051)",
-      desc: "Operandem instrukcji jest jeden z rejestrów R0..R7 z aktywnego banku rejestrów, akumulator, rejestr B lub wskaźnik danych DPTR. Operacje wykonywane są bezpośrednio na rejestrach roboczych procesora (np. ACC, DPTR, lub R0 do R7 z aktualnie wybranego banku rejestrów).",
-      example: "MOV A, R0",
-      comment: "przeniesienie zawartości rejestru R0 do akumulatora"
-    },
-    {
-      name: "Adresowanie bezpośrednie (Intel 8051)",
-      desc: "Operand jest jawnie podanym 8-bitowym adresem rejestru SFR, rejestru dolnego obszaru RAM lub bitu adresowalnego bezpośrednio. Adres komórki jest podany wprost w kodzie instrukcji. Umożliwia dostęp do pełnego obszaru wewnętrznego RAM (00h-FFh). W zakresie 0-127 (00h-7Fh) adresuje pamięć danych użytkownika, natomiast w zakresie 128-255 (80h-FFh) zapewnia wyłączny dostęp do rejestrów specjalnych (SFR).",
-      example: "MOV A, 032H",
-      comment: "przeniesienie zawartości komórki o adresie 032H do akumulatora"
-    },
-    {
-      name: "Adresowanie natychmiastowe (Intel 8051)",
-      desc: "Operand jest stałą (8 lub 16 bit.) umieszczoną w kodzie programu (pamięć ROM). Wartość stała zapisana jest bezpośrednio w pamięci programu jako część instrukcji, poprzedzana znakiem #.",
-      example: "ADD A, #32H",
-      comment: "dodanie do akumulatora liczby 32H"
-    },
-    {
-      name: "Adresowanie pośrednie (Intel 8051)",
-      desc: "Określenie adresu za pomocą zawartości R0 lub R1 (z aktywnego banku rejestrów) – odwołanie do przestrzeni 256 bajtów. Rejestr wskazuje nie na samą daną, lecz na adres komórki pamięci, w której ta dana się znajduje. Oznaczane symbolem @. Dla wewnętrznej pamięci RAM rolę wskaźników mogą pełnić wyłącznie rejestry R0 i R1, a dla pamięci zewnętrznej — 16-bitowy rejestr DPTR.",
-      example: "MOV A, @R0",
-      comment: "przeniesienie zawartości komórki o adresie zawartym w rejestrze R0 do akumulatora"
-    },
-    {
-      name: "Adresowanie sumą zawartości rejestru bazowego i indeksowego (Intel 8051)",
-      desc: "Służy do kopiowania bajtu z pamięci programu (ROM). Adres efektywny wyznaczany jest jako suma zawartości rejestru bazowego i indeksowego (A + DPTR lub A + PC).",
-      example: "MOVC A, @A+DPTR",
-      comment: "przeniesienie zawartości komórki pamięci programu o adresie zawartość A + DPTR do akumulatora"
-    },
-    {
-      name: "Adresowanie względne / Relative (Intel 8051)",
-      desc: "Wykorzystywane przy instrukcjach skoków i rozgałęzień. Adres docelowy obliczany jest dynamicznie jako suma aktualnego stanu Licznika Rozkazów (PC) oraz przesunięcia (offsetu). Jeśli instrukcja skoku znajduje się pod adresem $1000, to sam kod operacji zajmuje adres $1000, a offset ($02) zapisany jest pod $1001. Licznik PC automatycznie wskazuje na adres następnej instrukcji, czyli $1002. Stąd wyliczany jest skok efektywny: $1002 + $02 = $1004.",
-      example: "BRA $02",
-      comment: "skok efektywny do adresu $1004"
-    },
-    {
-      name: "Adresowanie bezpośrednie bitów / Bit (Intel 8051)",
-      desc: "Unikalna cecha architektury 8051 pozwalająca na bezpośrednie operowanie na pojedynczych bitach znajdujących się w specjalnym obszarze pamięci RAM (adresy bitowe 00h-7Fh) oraz w rejestrach SFR podzielnych przez 8.",
-      example: "MOV C, ACC.7",
-      comment: "przepisanie zawartości siódmego bitu akumulatora do flagi przeniesienia"
-    }
-  ]
+  intel8051: [] // user deleted intel 8051 specific standalone addressing modes, they are mapped inside topic 2 now
 };
-
 
 export const codeExercises = [
   {
     id: "ex1_loop",
     processor: "MC6800",
-    title: "Pętla zwielokrotniająca rejestr X",
-    task: "Zbuduj pętlę w programie, w której będzie zwiększany rejestr X od wartości 1 do wartości 1000 ($03E8 szesnastkowo).",
+    title: "A. Pętla oparta na rejestrze X (1-1000)",
+    task: "Zbuduj pętlę w programie, w której będzie zwiększany rejestr X od wartości 1 do wartości 1000.",
     code: [
-      { label: "LDX #$0001", comment: "Inicjalizacja rejestru X wartością 1" },
-      { label: "INX", comment: "Zwiększenie rejestru indeksowego X o 1 (etykieta pętli)" },
-      { label: "CPX #$1000", comment: "Porównanie rejestru X z wartością 1000 ($1000 w kodzie, rzeczywisty próg)" },
-      { label: "BNE $FA", comment: "Skok względny w tył do rozkazu INX (przesunięcie $FA = -6 bajtów), jeśli nie równe" }
+      { label: "LDX #1", comment: "Ładuje do X stałą wartość 1" },
+      { label: "INX", comment: "Dodaje 1 do rejestru X (Inkrementacja) - etykieta pętli" },
+      { label: "CPX #1000", comment: "Odejmuje 1000 od rejestru X i zmienia flagi (nie nadpisując samego X)" },
+      { label: "BNE $FA", comment: "BNE (Branch Not Equal) - skok wstecz do INX (offset $FA = -6), dopóki flagi Z=0" }
     ],
     initialState: {
       registers: { A: 0, B: 0, X: 1, PC: 0x1000, SP: 0xFFF0, Flags: { Z: 0, N: 0 } },
       memory: {}
     },
     steps: [
-      { op: "LDX #$0001", pc: 0x1000, regs: { X: 1, PC: 0x1003 }, desc: "Załadowanie wartości natychmiastowej $0001 do rejestru X." },
+      { op: "LDX #1", pc: 0x1000, regs: { X: 1, PC: 0x1003 }, desc: "Załadowanie wartości natychmiastowej 1 do rejestru indeksowego X." },
       { op: "INX", pc: 0x1003, regs: { X: 2, PC: 0x1004 }, desc: "Inkrementacja rejestru X (teraz wynosi 2)." },
-      { op: "CPX #$1000", pc: 0x1004, regs: { PC: 0x1007, Flags: { Z: 0, N: 0 } }, desc: "Porównanie X z $1000. X to 2, więc flaga Z = 0." },
-      { op: "BNE $FA", pc: 0x1007, regs: { PC: 0x1003 }, desc: "BNE wykonuje skok, ponieważ Z = 0. PC skacze z powrotem do INX (adres $1003)." }
+      { op: "CPX #1000", pc: 0x1004, regs: { PC: 0x1007, Flags: { Z: 0, N: 0 } }, desc: "Porównanie X z 1000. X=2, więc wynik porównania jest różny od zera (Z = 0)." },
+      { op: "BNE $FA", pc: 0x1007, regs: { PC: 0x1003 }, desc: "Z=0, więc warunek skoku BNE jest spełniony. PC skacze z powrotem do rozkazu INX (adres $1003)." }
     ]
   },
   {
     id: "ex2_mul3",
     processor: "MC6800",
-    title: "Mnożenie przez 3 bez akumulatora",
-    task: "Pomnóż wartość w akumulatorze B przez liczbę 3 i zapisz wynik do akumulatora A, pomiń przeniesienie (użyj rejestru X jako licznika pętli).",
+    title: "B. Mnożenie przez 3 bez akumulatora (A = B * 3)",
+    task: "Pomnóż wartość w akumulatorze B przez liczbę 3 i zapisz wynik do akumulatora A, pomiń przeniesienie (wykorzystaj przesunięcie arytmetyczne ASLA).",
     code: [
-      { label: "LDX #$0000", comment: "Wyczyszczenie licznika pętli X" },
-      { label: "ABA", comment: "A = A + B (dodaj B do akumulatora A)" },
-      { label: "INX", comment: "Zwiększ licznik pętli o 1" },
-      { label: "CPX #$0003", comment: "Czy pętla wykonała się 3 razy?" },
-      { label: "BNE $F9", comment: "Skok do ABA ($F9 = -7 bajtów) jeśli X != 3" }
+      { label: "TBA", comment: "Przerzuca kopię zmiennej z akumulatora B do akumulatora A" },
+      { label: "ASLA", comment: "Arytmetyczne przesunięcie bitowe w lewo w akumulatorze A (mnożenie A = A * 2)" },
+      { label: "ABA", comment: "Dodaje źródłową wartość z akumulatora B do aktualnego wyniku A (A = B * 2 + B = B * 3)" }
     ],
     initialState: {
       registers: { A: 0, B: 5, X: 0, PC: 0x1000, SP: 0xFFF0, Flags: { Z: 0 } },
       memory: {}
     },
     steps: [
-      { op: "LDX #$0000", pc: 0x1000, regs: { X: 0, PC: 0x1003 }, desc: "Załadowanie 0 do rejestru X. Akumulator B = 5 (wartość wejściowa), A = 0." },
-      { op: "ABA", pc: 0x1003, regs: { A: 5, PC: 0x1004 }, desc: "ABA: Dodanie B (5) do A (0). A wynosi teraz 5." },
-      { op: "INX", pc: 0x1004, regs: { X: 1, PC: 0x1005 }, desc: "Inkrementacja X (X = 1)." },
-      { op: "CPX #$0003", pc: 0x1005, regs: { PC: 0x1008, Flags: { Z: 0 } }, desc: "Porównanie X z 3. Ponieważ X=1, flaga Z = 0." },
-      { op: "BNE $F9", pc: 0x1008, regs: { PC: 0x1003 }, desc: "Z=0, więc skaczemy z powrotem do ABA (adres $1003)." }
+      { op: "TBA", pc: 0x1000, regs: { A: 5, B: 5, PC: 0x1001 }, desc: "Przepisanie wartości rejestru B (5) do akumulatora A (teraz A = 5)." },
+      { op: "ASLA", pc: 0x1001, regs: { A: 10, PC: 0x1002 }, desc: "Przesunięcie A w lewo. A = 5 * 2 = 10 (szesnastkowo $0A)." },
+      { op: "ABA", pc: 0x1002, regs: { A: 15, B: 5, PC: 0x1003 }, desc: "Dodanie B (5) do A (10). Wynik wynosi 15 (szesnastkowo $0F), czyli 5 * 3." }
     ]
   },
   {
     id: "ex3_comp",
     processor: "MC6800",
-    title: "Wybór większej liczby (do $1212)",
+    title: "C. Wybór większej liczby (do pamięci $1212)",
     task: "Porównaj dwie liczby w akumulatorach A i B, większą zapisz do komórki pamięci o adresie $1212.",
     code: [
-      { label: "CBA", comment: "Porównanie akumulatorów A i B (wykonuje A - B, ustawia flagi)" },
-      { label: "BGE $08", comment: "Jeśli A >= B (flaga N xor V = 0), skocz o 8 bajtów do przodu (do STAA $1212)" },
-      { label: "STAB $1212", comment: "Zapisz B do pamięci pod adres $1212 (bo B było większe)" },
-      { label: "BRA $0B", comment: "Skok bezwarunkowy o 11 bajtów omijający zapis z A" },
-      { label: "STAA $1212", comment: "Zapisz A do pamięci pod adres $1212" }
+      { label: "CBA", comment: "Porównuje akumulatory i zmienia flagi w rejestrze statusu (wykonuje A - B)" },
+      { label: "BCC $05", comment: "Branch if Carry Clear (skok jeśli A >= B) o 5 bajtów do przodu (do STAA $1212)" },
+      { label: "STAB $1212", comment: "B było większe - zapisz B do pamięci pod adres $1212" },
+      { label: "BRA $03", comment: "BRA (Branch Always) - bezwarunkowy przeskok omijający zapis z akumulatora A" },
+      { label: "STAA $1212", comment: "A było większe lub równe - zapisz A do pamięci pod adres $1212" },
+      { label: "NOP", comment: "Pusta operacja oparcia skoku (koniec)" }
     ],
     initialState: {
-      registers: { A: 12, B: 20, X: 0, PC: 0x1000, SP: 0xFFF0, Flags: { Z: 0, N: 1 } },
+      registers: { A: 12, B: 20, X: 0, PC: 0x1000, SP: 0xFFF0, Flags: { Z: 0, C: 0 } },
       memory: { "1212": 0 }
     },
     steps: [
-      { op: "CBA", pc: 0x1000, regs: { PC: 0x1001, Flags: { Z: 0, N: 1 } }, desc: "Porównanie A (12) i B (20). Wynik ujemny, więc flaga N = 1 (A < B)." },
-      { op: "BGE $08", pc: 0x1001, regs: { PC: 0x1003 }, desc: "BGE nie skacze, ponieważ N = 1 (A nie jest większe/równe B). Idziemy dalej." },
-      { op: "STAB $1212", pc: 0x1003, regs: { PC: 0x1006 }, mem: { "1212": 20 }, desc: "STAB $1212: Zapis wartości B (20) do komórki $1212." },
-      { op: "BRA $0B", pc: 0x1006, regs: { PC: 0x100B }, desc: "BRA: Skok bezwarunkowy omijający zapis z A (STAA $1212)." }
+      { op: "CBA", pc: 0x1000, regs: { PC: 0x1001, Flags: { Z: 0, C: 1 } }, desc: "Porównanie A (12) i B (20). Wynik A - B < 0, więc ustawiana jest flaga Carry (C = 1)." },
+      { op: "BCC $05", pc: 0x1001, regs: { PC: 0x1003 }, desc: "BCC wymaga C=0. U nas C=1, więc warunek nie jest spełniony, skok nie następuje." },
+      { op: "STAB $1212", pc: 0x1003, regs: { PC: 0x1006 }, mem: { "1212": 20 }, desc: "Zapis rejestru B (20) do komórki pamięci o adresie $1212." },
+      { op: "BRA $03", pc: 0x1006, regs: { PC: 0x100B }, desc: "BRA: Bezwarunkowy skok o 3 bajty w przód, omijający instrukcję STAA (skok do NOP)." },
+      { op: "NOP", pc: 0x100B, regs: { PC: 0x100C }, desc: "Pusta operacja, koniec programu." }
     ]
   },
   {
     id: "ex4_swap",
     processor: "MC6800",
-    title: "Zamiana rejestrów A i B (podprogram)",
-    task: "Napisz podprogram zamieniający miejscami liczby zapisane w akumulatorach A i B, używając komórki pamięci $1000 jako bufora.",
+    title: "D. Podprogram zamiany akumulatorów (SWAP)",
+    task: "Napisz podprogram zamieniający miejscami liczby zapisane w akumulatorach A i B przy użyciu stosu.",
     code: [
-      { label: "LDS #$FFF7", comment: "Inicjalizacja wskaźnika stosu SP" },
-      { label: "BSR $08", comment: "Wywołanie podprogramu (skok o 8 bajtów do przodu, odkłada PC na stos)" },
-      { label: "...", comment: "Dalsza część programu głównego" },
-      { label: "STAA $1000", comment: "Początek podprogramu: zapisz A do bufora $1000" },
-      { label: "TBA", comment: "Prześlij zawartość B do A (A = B)" },
-      { label: "LDAB $1000", comment: "Załaduj do B zawartość bufora $1000 (B = stary A)" },
-      { label: "RTS", comment: "Powrót z podprogramu (pobiera adres powrotu ze stosu do PC)" }
+      { label: "PSHA", comment: "Odkłada surową wartość A na wierzch stosu" },
+      { label: "PSHB", comment: "Odkłada surową wartość B na wierzch stosu" },
+      { label: "PULA", comment: "Ściąga aktualny wierzchołek stosu (czyli przed chwilą odłożone B) do rejestru A" },
+      { label: "PULB", comment: "Ściąga następną wartość ze stosu (czyli odłożone wcześniej A) do rejestru B" },
+      { label: "RTS", comment: "Return From Subroutine - powrót z podprogramu" }
     ],
     initialState: {
-      registers: { A: 0xAA, B: 0xBB, X: 0, PC: 0x1000, SP: 0xFFFF, Flags: {} },
-      memory: { "1000": 0 }
-    },
-    steps: [
-      { op: "LDS #$FFF7", pc: 0x1000, regs: { SP: 0xFFF7, PC: 0x1003 }, desc: "Ustawienie wskaźnika stosu SP na adres $FFF7." },
-      { op: "BSR $08", pc: 0x1003, regs: { SP: 0xFFF5, PC: 0x100D }, mem: { "FFF6": 0x10, "FFF7": 0x05 }, desc: "BSR odkłada adres powrotu ($1005) na stos (zmniejszając SP o 2) i skacze do $100D (etykieta podprogramu)." },
-      { op: "STAA $1000", pc: 0x100D, regs: { PC: 0x1010 }, mem: { "1000": 0xAA }, desc: "Zapis akumulatora A ($AA) do komórki pamięci $1000." },
-      { op: "TBA", pc: 0x1010, regs: { A: 0xBB, PC: 0x1011 }, desc: "TBA: Skopiowanie zawartości B ($BB) do A. Teraz oba mają $BB." },
-      { op: "LDAB $1000", pc: 0x1011, regs: { B: 0xAA, PC: 0x1014 }, desc: "LDAB: Załadowanie wartości z komórki $1000 ($AA) do B. Zamiana zakończona!" },
-      { op: "RTS", pc: 0x1014, regs: { SP: 0xFFF7, PC: 0x1005 }, desc: "RTS: Pobranie adresu powrotu ze stosu ($1005), zwiększenie SP o 2 i skok z powrotem." }
-    ]
-  },
-  {
-    id: "ex5_sort",
-    processor: "MC6800",
-    title: "Sortowanie 3 liczb (bąbelkowe)",
-    task: "W przestrzeni pamięci o adresie $2020 znajdują się 3 liczby 8-bitowe. Posortuj je od najmniejszej do największej.",
-    code: [
-      { label: "LDAA $2020", comment: "Pobierz 1. liczbę" },
-      { label: "LDAB $2021", comment: "Pobierz 2. liczbę" },
-      { label: "CBA", comment: "Porównaj (A - B)" },
-      { label: "BMI $04", comment: "Jeśli A < B (N=1), są w dobrej kolejności, skocz omijając zamianę" },
-      { label: "STAA $2021", comment: "Zamiana: zapisz A do $2021" },
-      { label: "STAB $2020", comment: "zapisz B do $2020" },
-      { label: "LDAA $2021", comment: "Pobierz nową 2. liczbę" },
-      { label: "LDAB $2022", comment: "Pobierz 3. liczbę" },
-      { label: "CBA", comment: "Porównaj (A - B)" },
-      { label: "BMI $04", comment: "Jeśli A < B, są ok, skocz omijając zamianę" },
-      { label: "STAA $2022", comment: "Zamiana: zapisz A do $2022" },
-      { label: "STAB $2021", comment: "zapisz B do $2021" },
-      { label: "LDAA $2020", comment: "Powtórne porównanie 1. i 2. elementu" },
-      { label: "LDAB $2021", comment: "Pobierz 2. element" },
-      { label: "CBA", comment: "Porównaj" },
-      { label: "BMI $04", comment: "Jeśli ok, skocz na koniec" },
-      { label: "STAA $2021", comment: "Zamiana" },
-      { label: "STAB $2020", comment: "Zamiana" }
-    ],
-    initialState: {
-      registers: { A: 0, B: 0, X: 0, PC: 0x1000, SP: 0xFFF0, Flags: {} },
-      memory: { "2020": 45, "2021": 12, "2022": 30 }
-    },
-    steps: [
-      { op: "LDAA $2020", pc: 0x1000, regs: { A: 45, PC: 0x1003 }, desc: "Załadowanie 1. liczby (45) do rejestru A." },
-      { op: "LDAB $2021", pc: 0x1003, regs: { B: 12, PC: 0x1006 }, desc: "Załadowanie 2. liczby (12) do rejestru B." },
-      { op: "CBA", pc: 0x1006, regs: { PC: 0x1007, Flags: { Z: 0, N: 0 } }, desc: "Porównanie A (45) i B (12). Wynik dodatni, więc N = 0 (45 > 12)." },
-      { op: "BMI $04", pc: 0x1007, regs: { PC: 0x1009 }, desc: "N = 0, więc BMI nie wykonuje skoku. Nastąpi zamiana miejscami." },
-      { op: "STAA $2021", pc: 0x1009, regs: { PC: 0x100C }, mem: { "2021": 45 }, desc: "Zapis A (45) pod adres $2021." },
-      { op: "STAB $2020", pc: 0x100C, regs: { PC: 0x100F }, mem: { "2020": 12, "2021": 45 }, desc: "Zapis B (12) pod adres $2020. Liczby 45 i 12 zostały zamienione." }
-    ]
-  },
-  {
-    id: "ex6_gray",
-    processor: "MC6800",
-    title: "Konwersja Binarny -> Gray",
-    task: "Przelicz liczbę z komórki pamięci $10 (binarnie) na kod Greya i zapisz wynik w komórce $11.",
-    code: [
-      { label: "LDAA $10", comment: "Pobierz liczbę binarną z komórki $10" },
-      { label: "LSRA", comment: "Przesuń bity w rejestrze A o 1 pozycję w prawo (A = A / 2)" },
-      { label: "EORA $10", comment: "Operacja XOR między przesuniętym A a oryginalną komórką $10" },
-      { label: "STAA $11", comment: "Zapisz wynik w kodzie Greya do komórki $11" }
-    ],
-    initialState: {
-      registers: { A: 0, B: 0, X: 0, PC: 0x1000, SP: 0xFFF0, Flags: {} },
-      memory: { "10": 0b1101 } // 13 w systemie dziesiętnym
-    },
-    steps: [
-      { op: "LDAA $10", pc: 0x1000, regs: { A: 13, PC: 0x1002 }, desc: "Pobranie wartości 13 (binarnie 1101) do akumulatora A." },
-      { op: "LSRA", pc: 0x1002, regs: { A: 6, PC: 0x1003 }, desc: "Przesunięcie A w prawo (1101 -> 0110, czyli 6 dziesiętnie)." },
-      { op: "EORA $10", pc: 0x1003, regs: { A: 11, PC: 0x1005 }, desc: "Operacja XOR: 0110 XOR 1101 = 1011 (czyli 11 dziesiętnie). Jest to reprezentacja Graya liczby 13." },
-      { op: "STAA $11", pc: 0x1005, regs: { PC: 0x1007 }, mem: { "11": 11 }, desc: "Zapisanie kodu Greya (11 / 1011b) do komórki pamięci $11." }
-    ]
-  },
-  {
-    id: "ex7_bcd_sub",
-    processor: "Intel8051",
-    title: "Odejmowanie BCD z dopełnieniem do 10",
-    task: "W rejestrach R0 i R1 znajdują się liczby BCD. Wykonaj odejmowanie R0 - R1 w systemie BCD przy użyciu metody dopełnienia do 10 i zapisz wynik do akumulatora A.",
-    code: [
-      { label: "MOV R0, #028h", comment: "R0 = 28 BCD (odjemna)" },
-      { label: "MOV R1, #014h", comment: "R1 = 14 BCD (odjemnik)" },
-      { label: "MOV A, #099h", comment: "Załaduj 99H do A (wyznaczenie dopełnienia do 9)" },
-      { label: "SUBB A, R1", comment: "A = 99H - R1 (dopełnienie do 9 liczby R1)" },
-      { label: "INC A", comment: "A = A + 1 (zamiana dopełnienia do 9 na dopełnienie do 10)" },
-      { label: "ADD A, R0", comment: "Dodanie odjemnej R0 do dopełnienia do 10" },
-      { label: "DA A", comment: "Korekcja dziesiętna wyniku dodawania BCD (Wynik: 14H)" }
-    ],
-    initialState: {
-      registers: { A: 0, R0: 0, R1: 0, PC: 0x0000, Flags: { CY: 0 } },
+      registers: { A: 0xAA, B: 0xBB, X: 0, PC: 0x1000, SP: 0xFFF0, Flags: {} },
       memory: {}
     },
     steps: [
-      { op: "MOV R0, #028h", pc: 0x0000, regs: { R0: 0x28, PC: 0x0002 }, desc: "Załadowanie wartości 28H (BCD dla 28) do rejestru R0." },
-      { op: "MOV R1, #014h", pc: 0x0002, regs: { R1: 0x14, PC: 0x0004 }, desc: "Załadowanie wartości 14H (BCD dla 14) do rejestru R1." },
-      { op: "MOV A, #099h", pc: 0x0004, regs: { A: 0x99, PC: 0x0006 }, desc: "Załadowanie stałej 99H do akumulatora w celu wykonania dopełnienia." },
-      { op: "SUBB A, R1", pc: 0x0006, regs: { A: 0x85, PC: 0x0007 }, desc: "SUBB: 99H - 14H = 85H (dopełnienie do 9)." },
-      { op: "INC A", pc: 0x0007, regs: { A: 0x86, PC: 0x0008 }, desc: "Inkrementacja A: 85H + 1 = 86H (dopełnienie do 10)." },
-      { op: "ADD A, R0", pc: 0x0008, regs: { A: 0xAE, PC: 0x0009 }, desc: "ADD: Dodanie R0 (28H) do A (86H). 86H + 28H = AEH." },
-      { op: "DA A", pc: 0x0009, regs: { A: 0x14, PC: 0x000A, Flags: { CY: 1 } }, desc: "Korekcja dziesiętna (DA A): AEH korygowane jest do 14H (z przeniesieniem CY=1, które ignorujemy). Wynik odejmowania 28 - 14 = 14 BCD!" }
+      { op: "PSHA", pc: 0x1000, regs: { SP: 0xFFEF, PC: 0x1001 }, mem: { "FFF0": 0xAA }, desc: "PSHA: Zapisanie akumulatora A ($AA) pod adres SP ($FFF0), zmniejszenie SP o 1." },
+      { op: "PSHB", pc: 0x1001, regs: { SP: 0xFFEE, PC: 0x1002 }, mem: { "FFF0": 0xAA, "FFEF": 0xBB }, desc: "PSHB: Zapisanie akumulatora B ($BB) pod adres SP ($FFEF), zmniejszenie SP o 1." },
+      { op: "PULA", pc: 0x1002, regs: { A: 0xBB, SP: 0xFFEF, PC: 0x1003 }, desc: "PULA: Zwiększenie SP o 1, odczyt ze stosu spod adresu $FFEF ($BB) do rejestru A." },
+      { op: "PULB", pc: 0x1003, regs: { B: 0xAA, SP: 0xFFF0, PC: 0x1004 }, desc: "PULB: Zwiększenie SP o 1, odczyt ze stosu spod adresu $FFF0 ($AA) do rejestru B. Zamiana zakończona!" },
+      { op: "RTS", pc: 0x1004, regs: { PC: 0x1005 }, desc: "RTS: Powrót z podprogramu do programu głównego." }
     ]
   }
 ];
@@ -357,197 +258,205 @@ export const codeExercises = [
 export const flashcards = [
   {
     id: "fc1",
-    category: "Pojęcia",
-    front: "Co to jest Podprogram i do czego służy?",
-    back: "Wydzielony, autonomiczny fragment kodu, realizujący konkretne zadanie. Pozwala na modułowość i oszczędność pamięci ROM (wiele wywołań w różnych miejscach). Wywoływany przez BSR/JSR, kończy się rozkazem RTS."
+    category: "Tryby adresowania MC6800",
+    front: "Domniemane (Rejestrowe / Implied) — MC6800",
+    back: "Kod instrukcji sam w sobie określa na jakim rejestrze operuje, nie wymaga podawania dodatkowego adresu (np. INX - inkrementuj rejestr X). Rozkaz jest jednobajtowy, a procesor nie musi pobierać adresu z pamięci.",
+    association: "Samo gęste. Rozkaz jest tak oczywisty, że sam w sobie wie, co ma robić. Nie musisz podawać mu żadnego adresu w pamięci.",
+    keywords: ["kod", "sam w sobie", "rejestrze", "adresu", "inx", "jednobajtowy"]
   },
   {
     id: "fc2",
-    category: "Pojęcia",
-    front: "Co to jest Stos i w jakiej kolejności działa?",
-    back: "Wydzielony obszar pamięci RAM przeznaczony do tymczasowego przechowywania danych. Działa w kolejności LIFO (Last In, First Out). Wskazywany przez rejestr SP (Stack Pointer)."
+    category: "Tryby adresowania MC6800",
+    front: "Natychmiastowe (Immediate) — MC6800",
+    back: "Stała wartość danych (argument) jest wpisana na sztywno w kodzie instrukcji, zaraz po opkodzie. Poprzedza się ją znakiem # (np. LDAA #$12 - załaduj do akumulatora A wartość 12 Hex). Wartość stała zapisana jest bezpośrednio w pamięci programu (ROM) jako część instrukcji.",
+    association: "Tu i teraz. Znak #. Zamiast mówić procesorowi 'idź pod adres X i weź stamtąd liczbę', dajesz mu tę liczbę od razu do ręki.",
+    keywords: ["stała", "wpisana", "sztywno", "#", "ldaa", "immediate", "natychmiastowe"]
   },
   {
     id: "fc3",
-    category: "Pojęcia",
-    front: "Do czego najczęściej służy Stos?",
-    back: "1. Obsługa przerwań (zapis stanu rejestrów CPU).\n2. Wywoływanie podprogramów (zapis adresu powrotu).\n3. Tymczasowe przechowywanie danych programu."
+    category: "Tryby adresowania MC6800",
+    front: "Bezpośrednie (Direct) — MC6800",
+    back: "Instrukcja zawiera 8-bitowy adres, odwołując się do szybkiej tzw. strony zerowej pamięci RAM ($0000-$00FF). Pozwala to zaoszczędzić miejsce (rozkaz zajmuje 2 bajty) i przyspieszyć wykonanie (np. LDAA $12).",
+    association: "Szybki skrót. Kod używa tylko połówki adresu (8 bitów), żeby błyskawicznie dostać się do pierwszej strony pamięci.",
+    keywords: ["8-bitowy", "strony zerowej", "ram", "$0000", "$00ff", "2 bajty", "bezpośrednie"]
   },
   {
     id: "fc4",
-    category: "Pojęcia",
-    front: "W którą stronę rośnie stos w MC6800 i jak zachowuje się SP?",
-    back: "Stos rośnie 'w dół' (w stronę niższych adresów RAM). Przy zapisie (PSH) najpierw następuje zapis pod adres SP, a potem SP jest automatycznie dekrementowany. Przy odczycie (PUL) SP jest najpierw inkrementowany, a potem następuje odczyt."
+    category: "Tryby adresowania MC6800",
+    front: "Rozszerzone (Extended) — MC6800",
+    back: "Instrukcja przechowuje pełny, 16-bitowy adres komórki pamięci. Daje to dostęp do całej 64-kilobajtowej przestrzeni adresowej procesora ($0000-$FFFF), ale rozkaz jest trzybajtowy i wymaga pobrania pełnego adresu z pamięci programu (np. LDAA $1234).",
+    association: "Pełny zasięg. Używasz długiego adresu, żeby sięgnąć w absolutnie każdy kąt całej pamięci procesora.",
+    keywords: ["16-bitowy", "pełny", "$0000-$ffff", "całej", "przestrzeni", "rozszerzone"]
   },
   {
     id: "fc5",
-    category: "Pojęcia",
-    front: "Co to jest Wektor Przerwań?",
-    back: "Komórka lub stały obszar w pamięci o z góry określonym adresie, w którym zapisany jest adres podprogramu obsługi (ISR) danego przerwania. Umożliwia procesorowi skok do procedury obsługi po wystąpieniu przerwania."
+    category: "Tryby adresowania MC6800",
+    front: "Indeksowe (Indexed) — MC6800",
+    back: "Adres docelowy (efektywny) operandu wyliczany jest dynamicznie jako suma wartości 16-bitowego rejestru indeksowego X oraz 8-bitowego przesunięcia (offsetu bez znaku) zakodowanego w instrukcji (np. LDAA 5,X).",
+    association: "Baza + krok. Rejestr X to Twój punkt startowy, a w instrukcji podajesz tylko, o ile kroków od tego punktu masz się przesunąć.",
+    keywords: ["indeksowego x", "suma", "przesunięcia", "offsetu", "5,x", "indeksowe"]
   },
   {
     id: "fc6",
-    category: "Asembler MC6800",
-    front: "Jak rozróżnić adresowanie natychmiastowe od bezpośredniego w kodzie MC6800?",
-    back: "W natychmiastowym używamy znaku '#', a argumentem jest stała liczba, np. LDAA #$55.\nW bezpośrednim brak '#', argumentem jest 8-bitowy adres w pamięci, np. LDAA $25."
+    category: "Tryby adresowania MC6800",
+    front: "Względne (Relative) — MC6800",
+    back: "Stosowane wyłącznie w instrukcjach skoków warunkowych. Adres docelowy wyliczany jest poprzez dodanie do aktualnej zawartości Licznika Rozkazów (PC) 8-bitowego offsetu ze znakiem (kod U2). Zasięg skoku wynosi od -128 do +127 bajtów od adresu następnej instrukcji (np. BRA $0A).",
+    association: "Skok względem siebie. Procesor nie skacze pod konkretny adres, tylko np. '10 kroków do przodu' od miejsca, w którym aktualnie stoi.",
+    keywords: ["skoków warunkowych", "licznik rozkazów", "pc", "offsetu", "u2", "-128", "127", "względne"]
   },
   {
     id: "fc7",
-    category: "Asembler MC6800",
-    front: "Czym różni się adresowanie bezpośrednie (Direct) od rozszerzonego (Extended) w MC6800?",
-    back: "Bezpośrednie (Direct) używa 8-bitowego adresu i działa tylko w zakresie $00-$FF (strona zerowa, szybszy dostęp). Rozszerzone (Extended) używa pełnego 16-bitowego adresu ($0000-$FFFF) i instrukcja zajmuje 3 bajty zamiast 2."
+    category: "Teoria 8051",
+    front: "Organizacja wewnętrznej pamięci danych RAM w Intelu 8051",
+    back: "Wewnętrzna pamięć RAM standardowego 8051 ma 128 bajtów (00H-7FH) i dzieli się na:\n- 00H-1FH: 4 banki rejestrów roboczych R0-R7 (adresowanie rejestrowe, bezpośrednie, pośrednie)\n- 20H-2FH: obszar adresowany bitowo (16 bajtów, 128 bitów do operacji logicznych)\n- 30H-7FH: pamięć ogólnego przeznaczenia (notes, stos, zmienne)\n- Obszar powyżej 7FH (80H-FFH) to Rejestry Specjalne (SFR) dostępne wyłącznie bezpośrednio.",
+    association: "Cztery strefy RAM. Banki na dole, bity pośrodku, notatnik na górze, a rejestry systemowe (SFR) w chmurze powyżej 7FH.",
+    keywords: ["128 bajtów", "00h-7fh", "banki rejestrów", "r0-r7", "adresowany bitowo", "sfr", "bezpośrednie"]
   },
   {
     id: "fc8",
-    category: "Asembler Intel 8051",
-    front: "Jakie rejestry mogą pełnić rolę wskaźników przy adresowaniu pośrednim w wewnętrznym RAM w 8051?",
-    back: "Wyłącznie rejestry robocze R0 i R1 z aktualnie wybranego banku rejestrów (oznaczane jako @R0 i @R1)."
+    category: "Teoria Magistral",
+    front: "Magistrale: adresowa, danych i sterująca w MC6800, MC68HC05, Intel 8051",
+    back: "1. Magistrala adresowa: Jednokierunkowa (od CPU), wskazuje adres komórki. MC6800 i 8051 mają szynę 16-bitową (adresowanie do 64 KB).\n2. Magistrala danych: Dwukierunkowa, 8-bitowa. Służy do transferu kodów instrukcji oraz danych operacyjnych.\n3. Magistrala sterująca: Zespół sygnałów zarządzających (R/W, zegar, IRQ, RESET).\n* Uwaga: MC68HC05 to mikrokontroler jednoukładowy i nie ma wyprowadzonych magistral na piny zewnętrzne (są wewnątrz).",
+    association: "Autostrady procesora. Adresowa (droga jednokierunkowa dla adresów), Danych (dwukierunkowa dla paczek danych), Sterująca (policja kierująca ruchem). HC05 ma je schowane wewnątrz.",
+    keywords: ["adresowa", "jednokierunkowa", "danych", "dwukierunkowa", "sterująca", "r/w", "jednoukładowy"]
   },
   {
     id: "fc9",
-    category: "Asembler Intel 8051",
-    front: "Na czym polega adresowanie bezpośrednie bitów w 8051?",
-    back: "To unikalna cecha 8051 pozwalająca na wykonywanie operacji logicznych (np. ustawienie, wyczyszczenie, negacja) na pojedynczych bitach. Adresy bitowe znajdują się w RAM ($20-$2F) lub w rejestrach SFR (np. ACC.7)."
+    category: "Teoria Sterowników",
+    front: "Minimalna konfiguracja sterownika mikroprocesorowego z MC6800",
+    back: "Do działania układ wymaga zewnętrznych komponentów:\n1. Dwufazowego, niepokrywającego się generatora zegara systemowego (np. MC6875).\n2. Zewnętrznej pamięci ROM (program, wektory przerwań i resetu).\n3. Zewnętrznej pamięci RAM (stos, zmienne robocze).\n4. Układu RESET (sprzętowa inicjalizacja linii resetu po włączeniu zasilania).",
+    association: "Cztery filary MC6800. Zegar (serce), ROM (mózg z wiedzą), RAM (notatnik podręczny), RESET (przycisk narodzin). MC6800 sam nie potrafi żyć bez tej paczki.",
+    keywords: ["dwufazowego", "zegar", "mc6875", "rom", "ram", "reset"]
   },
   {
     id: "fc10",
-    category: "Asembler MC6800",
-    front: "Co oznacza instrukcja BNE $FA w kontekście pętli?",
-    back: "BNE to 'Branch if Not Equal' (skok gdy flaga Z=0). Wartość $FA to 8-bitowe przesunięcie ze znakiem w kodzie U2. $FA = -6 dziesiętnie, co powoduje skok wstecz o 6 bajtów (zwykle na początek pętli)."
+    category: "Teoria Rejestrów",
+    front: "Rejestry wewnętrzne MC6800, MC68HC05, Intel 8051",
+    back: "- MC6800: Akumulatory A i B (8-bit), Rejestr indeksowy X (16-bit), PC (16-bit), SP (16-bit), CCR (8-bit).\n- MC68HC05: Akumulator A (8-bit), X (8-bit), SP (skrócony), PC, CCR (5-bit).\n- Intel 8051: Akumulator A (8-bit), Rejestr B (8-bit, do mnożenia/dzielenia), DPTR (16-bit), PC (16-bit), SP (8-bit), PSW (8-bit).",
+    association: "Składniki rejestrowe. Motorola stawia na indeks X i akumulatory A/B. Intel 8051 na parę A/B, DPTR do pamięci zewnętrznej i wskaźnik SP w RAM.",
+    keywords: ["akumulatory a i b", "x (16-bit)", "sp (16-bit)", "ccr", "dptr", "psw"]
   },
   {
     id: "fc11",
-    category: "Matematyka BCD",
-    front: "Dlaczego po dodawaniu liczb BCD musimy użyć instrukcji korekcji (DA A / DAA)?",
-    back: "Suma dwóch cyfr BCD może przekroczyć 9 lub wywołać przeniesienie półbajtowe. Instrukcja DA A koryguje wynik dodawania binarnego z powrotem do poprawnego formatu BCD poprzez dodanie wartości 6 do półbajtów, które przekroczyły 9."
+    category: "Teoria Stosu",
+    front: "Budowa i przeznaczenie stosu [PEWNIAK]",
+    back: "Stos to wydzielona sekcja w pamięci RAM mikrokontrolera działająca według architektury LIFO (Last In, First Out) – ostatni zapisany element odczytywany jest jako pierwszy. Pozycję wierzchołka monitoruje rejestr wskaźnika stosu SP (Stack Pointer).\nSłuży do:\n1. Zapisu adresów powrotu z podprogramów (bsr, jsr).\n2. Zapisywania rejestrów CPU i flag podczas przerwań.\n3. Tymczasowego przechowywania danych instrukcjami PSH / PUL.",
+    association: "Stos talerzy w restauracji. Nowy talerz kładziesz na samą górę, ściągasz też z góry. SP to palec pokazujący najwyższy talerz.",
+    keywords: ["lifo", "ram", "sp", "adresów powrotu", "podprogram", "przerwań", "psh", "pul"]
   },
   {
     id: "fc12",
-    category: "Matematyka BCD",
-    front: "Jak wykonuje się odejmowanie BCD w 8051 bez dedykowanej instrukcji odejmowania BCD?",
-    back: "Ponieważ nie ma bezpośredniej korekcji po odejmowaniu BCD, stosuje się dodanie dopełnienia do 10 liczby odejmowanej:\n1. Dopełnienie do 9 (99H - liczba).\n2. Dopełnienie do 10 (+1 do wyniku).\n3. Dodanie do odjemnej.\n4. Wykonanie korekcji DA A."
+    category: "Teoria Podprogramów",
+    front: "Budowa i przeznaczenie podprogramu [PEWNIAK]",
+    back: "Podprogram to wydzielony blok kodu poza główną pętlą. Wywoływany instrukcją JSR/BSR, która odkłada 16-bitowy adres powrotu (PC) na stos i skacze do kodu podprogramu. Kończy się rozkazem RTS (Return from Subroutine), który ściąga adres powrotu ze stosu do PC i wraca do głównego kodu. Zapobiega dublowaniu kodu i organizuje strukturę programu.",
+    association: "Zlecenie pracownikowi. Wysyłasz go instrukcją JSR, on robi swoje i po przeczytaniu RTS wraca dokładnie w miejsce wywołania.",
+    keywords: ["wydzielony", "jsr", "bsr", "powrotu", "stos", "rts", "dublowaniu"]
+  },
+  {
+    id: "fc13",
+    category: "Teoria Przerwań",
+    front: "Co to jest i do czego służy wektor przerwań [PEWNIAK]",
+    back: "Wektor przerwań to sztywny, predefiniowany adres w pamięci ROM. Przechowuje adres podprogramu obsługi przerwania (ISR). Gdy pojawia się przerwanie sprzętowe (np. IRQ), procesor automatycznie odkłada rejestry na stos, odczytuje z wektora adres ISR, skacze tam i go wykonuje. Procedura kończy się instrukcją RTI/RETI, wznawiającą przerwany program.",
+    association: "Tablica alarmowa. Gdy syrena (przerwanie) wyje, procesor patrzy na tablicę (wektor), dowiaduje się pod jaki adres skoczyć (ISR) i biegnie tam ratować sytuację.",
+    keywords: ["rom", "adres", "isr", "obsługi przerwania", "rti", "skok"]
   }
 ];
 
 export const quizQuestions = [
   {
     id: "q1",
-    question: "Wskaźnik stosu (SP) w procesorze MC6800 po wykonaniu operacji zapisu (PUSH/PSH):",
+    question: "Wskaźnik stosu (SP) w procesorze MC6800 po wykonaniu instrukcji zapisu (PSHA/PSHB):",
     options: [
-      "Jest automatycznie inkrementowany o 1",
       "Jest automatycznie dekrementowany o 1",
+      "Jest automatycznie inkrementowany o 1",
       "Pozostaje bez zmian",
       "Jest dekrementowany o 2"
     ],
-    answer: 1,
-    explanation: "W MC6800 stos rośnie w dół pamięci. Po zapisie każdego bajtu (instrukcją PSH) wskaźnik stosu (SP) jest automatycznie dekrementowany o 1."
+    answer: 0,
+    explanation: "W MC6800 stos rośnie w dół pamięci. Po wykonaniu zapisu (PSH) wskaźnik SP jest automatycznie dekrementowany (zmniejszany o 1)."
   },
   {
     id: "q2",
-    question: "Które rejestry mogą służyć jako wskaźniki przy adresowaniu pośrednim w wewnętrznym RAM dla mikrokontrolera 8051?",
+    question: "Który tryb adresowania w MC6800 wymaga użycia znaku # przed wartością stałą?",
     options: [
-      "Dowolny rejestr R0-R7",
-      "Tylko R0 i R1",
-      "Tylko DPTR",
-      "Tylko akumulator A"
+      "Bezpośrednie (Direct)",
+      "Natychmiastowe (Immediate)",
+      "Rozszerzone (Extended)",
+      "Indeksowe (Indexed)"
     ],
     answer: 1,
-    explanation: "Dla wewnętrznej pamięci RAM w 8051 rolę wskaźników przy adresowaniu pośrednim (oznaczanym @) mogą pełnić wyłącznie rejestry R0 i R1."
+    explanation: "Tryb natychmiastowy (Immediate) jest oznaczany znakiem #, a wartość argumentu jest wpisana bezpośrednio po kodzie operacji w ROM."
   },
   {
     id: "q3",
-    question: "W trybie adresowania natychmiastowego (np. LDAA #$55) argument:",
+    question: "Gdzie w strukturze mapy pamięci von Neumanna (MC6800) leżą wektory przerwań i resetu?",
     options: [
-      "Znajduje się w komórce pamięci RAM o podanym adresie",
-      "Jest rejestrem procesora",
-      "Jest stałą zapisaną w kodzie programu (ROM) bezpośrednio po kodzie operacji",
-      "Jest pobierany ze stosu"
+      "Na samym początku (adresy $0000-$00FF)",
+      "W obszarze rejestrów SFR",
+      "Na samym końcu przestrzeni adresowej (np. $FFF0-$FFFF)",
+      "Są rozproszone po całej pamięci RAM"
     ],
     answer: 2,
-    explanation: "W trybie natychmiastowym (oznaczonym symbolem #) dana jest częścią samej instrukcji i znajduje się bezpośrednio w pamięci programu (ROM)."
+    explanation: "W architekturze von Neumanna wektory przerwań i resetu są umieszczone pod z góry ustalonymi najwyższymi adresami pamięci ROM (np. od $FFF0 do $FFFF)."
   },
   {
     id: "q4",
-    question: "Co znajduje się w komórce pamięci zwanej 'Wektorem Przerwań'?",
+    question: "W jakim trybie działania timera w Intel 8051 następuje automatyczne przeładowanie wartości początkowej z rejestru TH do TL po przepełnieniu?",
     options: [
-      "Kod maszynowy obsługi przerwania",
-      "Adres podprogramu obsługi danego przerwania",
-      "Liczba określająca priorytet przerwania",
-      "Zabezpieczone rejestry procesora"
+      "Tryb 0",
+      "Tryb 1",
+      "Tryb 2 (8-bitowy z automatycznym przeładowaniem)",
+      "Tryb 3"
     ],
-    answer: 1,
-    explanation: "Wektor przerwań to komórka pamięci o stałym adresie, która przechowuje ADRES podprogramu obsługi przerwania (skąd procesor pobiera cel skoku po wystąpieniu przerwania)."
+    answer: 2,
+    explanation: "Tryb 2 to 8-bitowy timer z automatycznym przeładowaniem. Po przepełnieniu TL, stała początkowa z TH jest sprzętowo kopiowana do TL i odliczanie startuje od nowa."
   },
   {
     id: "q5",
-    question: "Do czego procesor MC6800 wykorzystuje stos przy skoku do podprogramu (JSR/BSR)?",
+    question: "Jaki jest rozmiar wskaźnika stosu (SP) w mikrokontrolerze Intel 8051?",
     options: [
-      "Do zapamiętania stanu akumulatorów A i B",
-      "Do zapisania adresu powrotu (rejestru PC)",
-      "Do przekazania argumentów funkcji",
-      "Stos nie jest wtedy używany"
+      "16 bitów",
+      "8 bitów",
+      "5 bitów",
+      "12 bitów"
     ],
     answer: 1,
-    explanation: "Podczas wywoływania podprogramu (JSR/BSR) procesor odkłada na stos adres powrotu (zawartość rejestru PC zwiększoną o 2 lub 3), aby móc wrócić instrukcją RTS."
+    explanation: "Wskaźnik stosu SP w Intel 8051 jest rejestrem 8-bitowym, ponieważ stos tego procesora jest zlokalizowany w wewnętrznej pamięci RAM (zakres adresów 00H-7FH)."
   },
   {
     id: "q6",
-    question: "W trybie adresowania względnego (Relative) dla MC6800, zasięg skoku wynosi:",
+    question: "Co robi instrukcja powrotu z podprogramu (RTS) w MC6800?",
     options: [
-      "Od 0 do 255 bajtów w przód",
-      "Od -128 do +127 bajtów od adresu następnej instrukcji",
-      "W obrębie całej pamięci 64KB",
-      "Tylko w obrębie strony zerowej (0-255)"
+      "Ściąga ze stosu odłożone rejestry CCR i akumulatory",
+      "Zmniejsza wskaźnik stosu SP o 2",
+      "Ściąga ze stosu 16-bitowy adres powrotu i wpisuje go do licznika rozkazów PC",
+      "Resetuje linie przerwania sprzętowego"
     ],
-    answer: 1,
-    explanation: "Adresowanie względne stosuje 8-bitowe przesunięcie (offset) ze znakiem w kodzie U2. Zasięg wynosi od -128 do +127 bajtów w stosunku do adresu następnego rozkazu."
+    answer: 2,
+    explanation: "Instrukcja RTS (Return from Subroutine) zdejmuje ze stosu uprzednio odłożony 16-bitowy adres powrotu i wpisuje go do rejestru PC, co umożliwia wznowienie głównego programu."
   },
   {
     id: "q7",
-    question: "Jaki jest cel stosowania instrukcji DA A (lub DAA) po operacji arytmetycznej na liczbach BCD?",
+    question: "Który z procesorów posiada wewnętrzne, niewyprowadzone na piny zewnętrzne magistrale adresową i danych?",
     options: [
-      "Przeliczenie wyniku na system szesnastkowy",
-      "Korekcja wyniku dodawania binarnego, aby odpowiadał poprawnej sumie w kodzie BCD",
-      "Wyzerowanie flagi przeniesienia",
-      "Przesunięcie wyniku o 4 bity w prawo"
+      "MC6800",
+      "Intel 8051",
+      "MC68HC05",
+      "Wszystkie powyższe"
     ],
-    answer: 1,
-    explanation: "DA A (Decimal Adjust Accumulator) koryguje wynik operacji binarnej dodawania do formatu BCD. Jeśli suma cyfr w półbajcie przekracza 9 lub wystąpiło przeniesienie pomocnicze, dodaje 6 do danego półbajtu."
+    answer: 2,
+    explanation: "MC68HC05 to mikrokontroler jednoukładowy, co oznacza, że magistrale danych i adresowa są zintegrowane wewnątrz struktury krzemowej i nie są wyprowadzone na zewnątrz."
   },
   {
     id: "q8",
-    question: "Jak w kodzie asemblera 8051 oznacza się adresowanie pośrednie?",
+    question: "Obszar pamięci RAM w Intel 8051 adresowany bezpośrednio bitowo rozciąga się w zakresie adresów:",
     options: [
-      "Przedrostkiem '#'",
-      "Przyrostkiem 'H'",
-      "Przedrostkiem '@'",
-      "Nawiasami kwadratowymi '[ ]'"
-    ],
-    answer: 2,
-    explanation: "Adresowanie pośrednie w architekturze 8051 oznacza się za pomocą symbolu '@', np. MOV A, @R0."
-  },
-  {
-    id: "q9",
-    question: "Aby odejąć liczby BCD w mikrokontrolerze 8051, należy zastosować dopełnienie do 10. Dopełnienie do 9 liczby dwucyfrowej BCD otrzymuje się poprzez:",
-    options: [
-      "Odjęcie tej liczby od 99H",
-      "Dodanie do tej liczby 99H",
-      "Zanegowanie wszystkich bitów liczby",
-      "Odjęcie tej liczby od 100H"
-    ],
-    answer: 0,
-    explanation: "Zgodnie z materiałami, dopełnienie do 9 dla dwucyfrowej liczby BCD tworzy się poprzez odjęcie jej od wartości 99H."
-  },
-  {
-    id: "q10",
-    question: "Tryb adresowania bezpośredniego strony zerowej (Direct / Page Zero) w MC6800:",
-    options: [
-      "Pozwala na adresowanie całej pamięci 64KB przy użyciu 8-bitowego adresu",
-      "Ogranicza się do zakresu adresów $0000 - $00FF i skraca rozmiar rozkazu o 1 bajt",
-      "Używa rejestru indeksowego X jako bazy",
-      "Wymaga użycia wskaźnika stosu SP"
+      "00H do 1FH",
+      "20H do 2FH",
+      "30H do 7FH",
+      "80H do FFH"
     ],
     answer: 1,
-    explanation: "Tryb bezpośredni (Direct) w MC6800 pobiera 8-bitowy adres, co ogranicza go do strony zerowej ($00-$FF). Dzięki temu instrukcja zajmuje 2 bajty zamiast 3, co przyspiesza jej wykonanie."
+    explanation: "Obszar adresowany bitowo w standardowym 8051 to 16 bajtów w zakresie od 20H do 2FH, dając 128 adresowalnych pojedynczych bitów."
   }
 ];
